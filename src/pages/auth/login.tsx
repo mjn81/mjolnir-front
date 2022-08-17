@@ -77,7 +77,6 @@ const LoginPage = () => {
                   required
                   fullWidth
                   label="Email Address"
-                  autoFocus
                 />
                 <Field
                   as={TextField}
@@ -86,7 +85,6 @@ const LoginPage = () => {
                   required
                   fullWidth
                   label="Password"
-                  autoFocus
                 />
                 <Button
                   type="submit"
