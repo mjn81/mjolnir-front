@@ -17,9 +17,9 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "src": ["./src"],
-      "public": ["./public"],
-      "*": ["./src/*"]
+      "src": ["src/"],
+      "public": ["public"],
+      "*": ["src/*"]
     }
   },
   "exclude": ["node_modules"],
