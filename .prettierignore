@@ -1,0 +1,13 @@
+node_modules
+*.html
+*.json
+*.lock
+*.log
+*.md
+*.png
+*.txt
+*.xml
+*.yml
+.config.*
+.config
+.*
