@@ -1,17 +1,24 @@
+import React from 'react';
 import {
+  Alert,
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
   Grid,
   TextField,
   Typography,
 } from '@mui/material';
-import { AuthLayout } from 'layouts';
-import React from 'react';
+import { Form, Formik, Field } from 'formik';
 import { Link } from 'react-router-dom';
 
+import {
+  ALERT_TYPES,
+  LOGIN_INITIAL_VALUES,
+  LOGIN_VALIDATOR,
+} from 'constants';
+import { AuthLayout } from 'layouts';
 const LoginPage = () => {
+  const handleSubmit = (values: any) => {};
+
   return (
     <AuthLayout>
       <Box
@@ -32,38 +39,69 @@ const LoginPage = () => {
         >
           Login.
         </Typography>
-        <Box sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ my: 2, padding: '10px' }}
+        <Box>
+          <Formik
+            initialValues={LOGIN_INITIAL_VALUES}
+            validationSchema={LOGIN_VALIDATOR}
+            onSubmit={handleSubmit}
           >
-            Sign In
-          </Button>
+            {({
+              values,
+              errors,
+              isSubmitting,
+            }) => (
+              <Form>
+                <Box>
+                  {Object.keys(errors).length >
+                    0 &&
+                    Object.values(errors).map(
+                      (message, index) => (
+                        <Alert
+                          sx={{
+                            mt: 1,
+                          }}
+                          severity={
+                            ALERT_TYPES.ERROR
+                          }
+                          key={`er_log_${index}`}
+                        >
+                          {message}
+                        </Alert>
+                      ),
+                    )}
+                </Box>
+                <Field
+                  as={TextField}
+                  name="email"
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Email Address"
+                  autoFocus
+                />
+                <Field
+                  as={TextField}
+                  name="password"
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Password"
+                  autoFocus
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ my: 2, padding: 1 }}
+                >
+                  sign in
+                </Button>
+              </Form>
+            )}
+          </Formik>
           <Grid container>
             <Grid item xs>
-              <Link to="/forgot-password">
+              <Link to="/forget-password">
                 Forgot password?
               </Link>
             </Grid>
