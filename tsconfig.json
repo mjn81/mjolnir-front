@@ -22,8 +22,10 @@
       "src": ["src/"],
       "public": ["public"],
       "*": ["src/*"]
-    }
+    },
+    "types": ["vite/client"]
   },
+
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

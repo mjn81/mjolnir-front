@@ -1,7 +1,11 @@
 export const LOGIN_INITIAL_VALUES = {
   email: '',
   password: '',
-  ds: '',
-  hds: '',
+};
 
+export const REGISTER_INITIAL_VALUES = {
+  email: '',
+  password: '',
+  fullName: '',
+  userName: '',
 };

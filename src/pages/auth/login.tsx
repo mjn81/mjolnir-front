@@ -8,16 +8,44 @@ import {
   Typography,
 } from '@mui/material';
 import { Form, Formik, Field } from 'formik';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { useSnackbar } from 'notistack';
 
 import {
   ALERT_TYPES,
+  LoginForm,
   LOGIN_INITIAL_VALUES,
   LOGIN_VALIDATOR,
-} from 'constants';
+  MESSAGE,
+} from 'constants/index';
 import { AuthLayout } from 'layouts';
+import { setAuth, store } from 'context';
+import { postLogin } from 'api';
+
 const LoginPage = () => {
-  const handleSubmit = (values: any) => {};
+  const navigation = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const { mutate } = useMutation(postLogin, {
+    onSuccess: ({ data }) => {
+      store.dispatch(setAuth(data));
+      enqueueSnackbar(data.message, {
+        variant: ALERT_TYPES.SUCCESS,
+      });
+      navigation('/app', { replace: true });
+    },
+    onError: ({ message }) => {
+      enqueueSnackbar(message, {
+        variant: ALERT_TYPES.ERROR,
+      });
+    },
+  });
+  const handleLogin = (values: LoginForm) => {
+    mutate(values);
+  };
 
   return (
     <AuthLayout>
@@ -43,7 +71,7 @@ const LoginPage = () => {
           <Formik
             initialValues={LOGIN_INITIAL_VALUES}
             validationSchema={LOGIN_VALIDATOR}
-            onSubmit={handleSubmit}
+            onSubmit={handleLogin}
           >
             {({
               values,
@@ -91,21 +119,22 @@ const LoginPage = () => {
                   fullWidth
                   variant="contained"
                   sx={{ my: 2, padding: 1 }}
+                  disabled={isSubmitting}
                 >
-                  sign in
+                  login
                 </Button>
               </Form>
             )}
           </Formik>
           <Grid container>
             <Grid item xs>
-              <Link to="/forget-password">
-                Forgot password?
+              <Link to="/auth/forget-password">
+                {MESSAGE['FORGET_PASSWORD_LINK']}
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/signup">
-                {"Don't have an account? Sign Up"}
+              <Link to="/auth/register">
+                {MESSAGE['SIGN_UP_LINK']}
               </Link>
             </Grid>
           </Grid>
