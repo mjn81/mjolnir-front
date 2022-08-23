@@ -5,6 +5,8 @@ import {
   Dashboard,
   ManageAccounts,
   PermDataSetting,
+  Folder,
+  Settings,
 } from '@mui/icons-material';
 
 export const DRAWER_MENU = [
@@ -14,15 +16,20 @@ export const DRAWER_MENU = [
     path: '/app',
   },
   {
+    name: 'Drive',
+    icon: Folder,
+    path: '/app/drive',
+  },
+  {
     name: 'Categories',
     icon: Category,
     path: '/app/categories',
   },
   {
-    name: 'Files',
-    icon: DriveFolderUpload,
-    path: '/app/files',
-  },
+    name: 'Settings',
+    icon: Settings,
+    path: '/app/settings',
+  }
 ];
 
 export const ADMIN_DRAWER_MENU = [

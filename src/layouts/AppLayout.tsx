@@ -178,45 +178,45 @@ export const AppLayout = ({
           >
             <MenuOutlined />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="h1"
+
+          <Box
+            width="100%"
+            display="flex"
+            flexDirection="row"
+            justifyContent="right"
+            alignItems="center"
           >
-            Mjolnir - FileApi
-          </Typography>
+            <AccountCircle
+              sx={{
+                marginRight: 1,
+              }}
+            />
+            {isAuthenticated && (
+              <Typography
+                textTransform="capitalize"
+                variant="h6"
+                noWrap
+              >
+                {user.userName}
+              </Typography>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <Link to="/app/profile">
-            <Box
+          <Box>
+            <Typography
+              component="h2"
               sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                textTransform: 'capitalize',
+                marginX: 1,
               }}
+              noWrap
             >
-              <AccountCircle
-                color="action"
-                sx={{
-                  fontSize: 30,
-                }}
-              />
-              <Typography
-                component="h2"
-                variant="h6"
-                color="textSecondary"
-                sx={{
-                  textTransform: 'capitalize',
-                  marginX: 1,
-                }}
-                noWrap
-              >
-                {data?.user.userName}
-              </Typography>
-            </Box>
-          </Link>
+              Mjolnir - FileApi
+            </Typography>
+          </Box>
 
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? (

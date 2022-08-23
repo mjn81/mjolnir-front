@@ -1,29 +1,30 @@
-import React from 'react';
+import { Upload } from '@mui/icons-material';
+import {
+  Button,
+  Typography,
+} from '@mui/material';
+import { Box } from '@mui/system';
+import {
+  deleteCategory,
+  getCategories,
+} from 'api';
 import { TableGenerator } from 'components';
 import {
   ALERT_TYPES,
   CATEGORY_COLUMNS,
 } from 'constants/index';
+import { useSnackbar } from 'notistack';
+import React from 'react';
 import {
   useMutation,
   useQuery,
 } from 'react-query';
 import {
-  deleteCategory,
-  getCategories,
-} from 'api';
-import {
-  Box,
-  Button,
-  Typography,
-} from '@mui/material';
-import {
   Link,
   useNavigate,
 } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 
-const Categories = () => {
+const Drive = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
   const { data, isLoading, refetch } = useQuery(
@@ -51,39 +52,31 @@ const Categories = () => {
     <div>
       <Box
         display="flex"
-        marginBottom={2}
+        marginBottom={1}
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
       >
         <Typography variant="h6" component="p">
-          Categories
+          Drive
         </Typography>
-        <Link to="create">
-          <Button variant="contained">
+        <Link to="upload">
+          <Button
+            variant="contained"
+            startIcon={<Upload />}
+          >
             <Typography
               variant="subtitle1"
               textTransform="capitalize"
             >
-              create category
+              Upload File
             </Typography>
           </Button>
         </Link>
       </Box>
-      {!isLoading && (
-        <TableGenerator
-          columns={CATEGORY_COLUMNS}
-          data={data.categories}
-          onEdit={(id) => {
-            navigation(`edit/${id}`);
-          }}
-          onDelete={(id) => {
-            mutateAsync(id).then(() => refetch());
-          }}
-        />
-      )}
+      {!isLoading}
     </div>
   );
 };
 
-export default Categories;
+export default Drive;
