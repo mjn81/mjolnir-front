@@ -1,20 +1,51 @@
 import React from 'react';
 import { TableGenerator } from 'components';
-import { CATEGORY_COLUMNS } from 'constants/index';
-import { useQuery } from 'react-query';
-import { getCategories } from 'api';
+import {
+  ALERT_TYPES,
+  CATEGORY_COLUMNS,
+} from 'constants/index';
+import {
+  useMutation,
+  useQuery,
+} from 'react-query';
+import {
+  deleteCategory,
+  getCategories,
+} from 'api';
 import {
   Box,
   Button,
   Typography,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 const Categories = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     'getCategories',
     getCategories,
+  );
+
+  const { mutateAsync } = useMutation(
+    'deleteCategory',
+    deleteCategory,
+    {
+      onSuccess: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.SUCCESS,
+        });
+      },
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
+    },
   );
   return (
     <div>
@@ -47,7 +78,7 @@ const Categories = () => {
             navigation(`edit/${id}`);
           }}
           onDelete={(id) => {
-            console.log(id);
+            mutateAsync(id).then(() => refetch());
           }}
         />
       )}

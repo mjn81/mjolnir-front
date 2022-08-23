@@ -35,3 +35,30 @@ export const CreateCategoryForm = ({
     />
   );
 };
+
+type EditCategoryProps = {
+  submit: (
+    values: CreateCategorySchema,
+    options: any,
+  ) => void;
+  data: CreateCategorySchema;
+};
+
+export const EditCategoryForm = ({
+  submit,
+  data,
+}: EditCategoryProps) => {
+  return (
+    <Generator
+      initialValues={data}
+      fields={CREATE_CATEGORY_FIELDS}
+      submit={submit}
+      validator={CREATE_CATEGORY_VALIDATOR}
+      submitBtn={
+        <Typography variant="h6" component="p">
+          Edit
+        </Typography>
+      }
+    />
+  );
+};

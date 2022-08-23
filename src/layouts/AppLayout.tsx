@@ -34,7 +34,11 @@ import {
 } from 'constants/index';
 import React, { PropsWithChildren } from 'react';
 import { useAppSelector } from 'hooks';
-import { Link, Outlet } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  useNavigate,
+} from 'react-router-dom';
 import { getProfile } from 'api';
 import { useQuery } from 'react-query';
 import { useSnackbar } from 'notistack';
@@ -130,6 +134,7 @@ export const AppLayout = ({
 }: PropsWithChildren) => {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
+  const navigation = useNavigate();
   const [open, setOpen] = React.useState(false);
   const { data } = useQuery(
     'getProfile',
@@ -138,6 +143,9 @@ export const AppLayout = ({
       onError: ({ message }) => {
         enqueueSnackbar(message, {
           variant: ALERT_TYPES.ERROR,
+        });
+        navigation('/auth/login', {
+          replace: true,
         });
       },
     },

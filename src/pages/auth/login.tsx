@@ -30,6 +30,7 @@ import {
 import { AuthLayout } from 'layouts';
 import { setAuth, store } from 'context';
 import { postLogin } from 'api';
+import { log } from 'console';
 
 const LoginPage = () => {
   const navigation = useNavigate();
@@ -92,8 +93,8 @@ const LoginPage = () => {
                 <Box>
                   {Object.keys(errors).length >
                     0 &&
-                    Object.keys(errors).map(
-                      (name, index) => (
+                    Object.values(errors).map(
+                      (message, index) => (
                         <Alert
                           sx={{
                             mt: 1,
@@ -103,9 +104,7 @@ const LoginPage = () => {
                           }
                           key={`er_log_${index}`}
                         >
-                          <ErrorMessage
-                            name={name}
-                          />
+                          {message}
                         </Alert>
                       ),
                     )}

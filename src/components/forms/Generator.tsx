@@ -51,8 +51,8 @@ export const Generator = ({
         <Form>
           <Box sx={{ marginBottom: 2 }}>
             {Object.keys(errors).length > 0 &&
-              Object.keys(errors).map(
-                (name, index) => (
+              Object.values(errors).map(
+                (message, index) => (
                   <Alert
                     sx={{
                       mt: 1,
@@ -60,7 +60,7 @@ export const Generator = ({
                     severity={ALERT_TYPES.ERROR}
                     key={`er_log_${index}`}
                   >
-                    <ErrorMessage name={name} />
+                    {message as string}
                   </Alert>
                 ),
               )}
@@ -102,6 +102,7 @@ type FieldProps = {
 
 const FieldGenerator = ({
   fieldType,
+  setField,
   ...others
 }: FieldProps) => {
   switch (fieldType) {

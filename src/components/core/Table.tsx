@@ -13,8 +13,8 @@ import {
 type Props = {
   data: any[];
   columns: any[];
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
 };
 
 export const TableGenerator = ({

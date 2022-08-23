@@ -35,3 +35,30 @@ export const postWithToken = async (
 export const post = (uri: string, data: any) => {
   return axiosInstance.post(uri, data);
 };
+
+export const putWithToken = async (
+  uri: string,
+  data: any,
+) => {
+  return axiosInstance
+    .put(uri, data, {
+      headers: {
+        Authorization:
+          store.getState().auth.token,
+      },
+    })
+    .then((res) => res.data);
+};
+
+export const deleteWithToken = async (
+  uri: string,
+) => {
+  return await axiosInstance
+    .delete(uri, {
+      headers: {
+        Authorization:
+          store.getState().auth.token,
+      },
+    })
+    .then((res) => res.data);
+};
