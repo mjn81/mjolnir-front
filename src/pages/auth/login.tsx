@@ -7,7 +7,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Form, Formik, Field } from 'formik';
+import {
+  Form,
+  Formik,
+  Field,
+  ErrorMessage,
+} from 'formik';
 import {
   Link,
   useNavigate,
@@ -29,7 +34,7 @@ import { postLogin } from 'api';
 const LoginPage = () => {
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { mutate } = useMutation(postLogin, {
+  const { mutateAsync } = useMutation(postLogin, {
     onSuccess: ({ data }) => {
       store.dispatch(setAuth(data));
       enqueueSnackbar(data.message, {
@@ -43,8 +48,13 @@ const LoginPage = () => {
       });
     },
   });
-  const handleLogin = (values: LoginForm) => {
-    mutate(values);
+  const handleLogin = (
+    values: LoginForm,
+    { setSubmitting },
+  ) => {
+    mutateAsync(values).finally(() => {
+      setSubmitting(false);
+    });
   };
 
   return (
@@ -82,8 +92,8 @@ const LoginPage = () => {
                 <Box>
                   {Object.keys(errors).length >
                     0 &&
-                    Object.values(errors).map(
-                      (message, index) => (
+                    Object.keys(errors).map(
+                      (name, index) => (
                         <Alert
                           sx={{
                             mt: 1,
@@ -93,7 +103,9 @@ const LoginPage = () => {
                           }
                           key={`er_log_${index}`}
                         >
-                          {message}
+                          <ErrorMessage
+                            name={name}
+                          />
                         </Alert>
                       ),
                     )}

@@ -9,3 +9,7 @@ export const REGISTER_INITIAL_VALUES = {
   fullName: '',
   userName: '',
 };
+
+export const CREATE_CATEGORY_INITIAL_VALUES = {
+  name: '',
+};

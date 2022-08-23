@@ -1,12 +1,23 @@
 import React from 'react';
 
-import { Button, TextField } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  TextField,
+} from '@mui/material';
 import {
   ALERT_TYPES,
   FormFieldTypes,
 } from 'constants/index';
-import { Field, Form, Formik } from 'formik';
+import {
+  ErrorMessage,
+  Field,
+  Form,
+  Formik,
+} from 'formik';
 import { AnyObjectSchema } from 'yup';
+import { FieldsType } from 'constants/index';
 
 type Props = {
   submit: (data: any, helpers: any) => any;
@@ -14,13 +25,7 @@ type Props = {
     [inp: string]: any;
   };
   validator: AnyObjectSchema;
-  fields: {
-    fieldType: FormFieldTypes;
-    name: string;
-    type?: string;
-    label?: string;
-    [inp: string]: any;
-  }[];
+  fields: FieldsType;
   submitBtn: React.ReactNode | React.ReactNode[];
 };
 
@@ -44,6 +49,22 @@ export const Generator = ({
         setFieldValue,
       }) => (
         <Form>
+          <Box sx={{ marginBottom: 2 }}>
+            {Object.keys(errors).length > 0 &&
+              Object.keys(errors).map(
+                (name, index) => (
+                  <Alert
+                    sx={{
+                      mt: 1,
+                    }}
+                    severity={ALERT_TYPES.ERROR}
+                    key={`er_log_${index}`}
+                  >
+                    <ErrorMessage name={name} />
+                  </Alert>
+                ),
+              )}
+          </Box>
           {fields.map(
             ({ fieldType, ...other }, index) => (
               <FieldGenerator
@@ -56,6 +77,8 @@ export const Generator = ({
           )}
           <Button
             type="submit"
+            variant="contained"
+            fullWidth
             disabled={isSubmitting}
           >
             {submitBtn}
@@ -88,6 +111,9 @@ const FieldGenerator = ({
           as={TextField}
           variant="outlined"
           fullWidth
+          sx={{
+            marginBottom: 2,
+          }}
           {...others}
         />
       );

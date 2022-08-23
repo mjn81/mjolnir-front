@@ -13,6 +13,7 @@ import LandingRouter from './landing';
 
 import 'styles/global.css';
 import { useAppSelector } from 'hooks';
+import { USER_ROLES } from 'constants/index';
 
 export const RouteManager = () => {
   const { isAuthenticated, user } =
@@ -36,7 +37,8 @@ export const RouteManager = () => {
             element={<AppRouter />}
           />
         )}
-        {!isAuthenticated ? (
+        {!isAuthenticated &&
+        user.role === USER_ROLES.ADMIN ? (
           <Navigate to="/auth/login" />
         ) : (
           <Route

@@ -19,122 +19,25 @@ import {
   MenuOutlined,
   ChevronLeft,
   ChevronRight,
-  Inbox,
-  Mail,
+  AccountCircle,
 } from '@mui/icons-material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {
   AppBarProps as MuiAppBarProps,
 } from '@mui/material/AppBar';
-import { DRAWE_WINDOW_WIDTH } from 'constants/index';
+import {
+  ALERT_TYPES,
+  DRAWE_WINDOW_WIDTH,
+  USER_ROLES,
+  ADMIN_DRAWER_MENU,
+  DRAWER_MENU,
+} from 'constants/index';
 import React, { PropsWithChildren } from 'react';
-
-// export const AppLayout = ({
-//   children,
-// }: PropsWithChildren) => {
-//   const drawer = (
-//     <div>
-//       <List>
-//         {[
-//           'Inbox',
-//           'Starred',
-//           'Send email',
-//           'Drafts',
-//         ].map((text, index) => (
-//           <ListItem key={text} disablePadding>
-//             <ListItemButton>
-//               <ListItemText primary={text} />
-//             </ListItemButton>
-//           </ListItem>
-//         ))}
-//       </List>
-//       <Divider />
-//       <List>
-//         {['All mail', 'Trash', 'Spam'].map(
-//           (text, index) => (
-//             <ListItem key={text} disablePadding>
-//               <ListItemButton>
-//                 <ListItemText primary={text} />
-//               </ListItemButton>
-//             </ListItem>
-//           ),
-//         )}
-//       </List>
-//     </div>
-//   );
-
-//   return (
-//     <Box
-//       sx={{
-//         display: 'flex',
-//         flexDirection: 'row',
-//       }}
-//     >
-//       <AppBar>
-//         <Toolbar />
-//       </AppBar>
-//       <Box sx={{ display: 'flex' }}>
-//         <CssBaseline />
-//         <Box
-//           component="nav"
-//           sx={{
-//             width: { sm: DRAWE_WINDOW_WIDTH },
-//             flexShrink: { sm: 0 },
-//           }}
-//           aria-label="mailbox folders"
-//         >
-//           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-//           {/* <Drawer
-//         container={container}
-//         variant="temporary"
-//         open={mobileOpen}
-//         onClose={handleDrawerToggle}
-//         ModalProps={{
-//           keepMounted: true, // Better open performance on mobile.
-//         }}
-//         sx={{
-//           display: { xs: 'block', sm: 'none' },
-//           '& .MuiDrawer-paper': {
-//             boxSizing: 'border-box',
-//             width: DRAWE_WINDOW_WIDTH,
-//           },
-//         }}
-//       >
-//         {drawer}
-//       </Drawer> */}
-//           <Drawer
-//             variant="permanent"
-//             sx={{
-//               display: {
-//                 xs: 'none',
-//                 sm: 'block',
-//               },
-//               '& .MuiDrawer-paper': {
-//                 boxSizing: 'border-box',
-//                 width: DRAWE_WINDOW_WIDTH,
-//               },
-//             }}
-//             open
-//           >
-//             {drawer}
-//           </Drawer>
-//         </Box>
-//         <Box
-//           component="main"
-//           sx={{
-//             flexGrow: 1,
-//             p: 3,
-//             width: {
-//               sm: `calc(100% - ${DRAWE_WINDOW_WIDTH}px)`,
-//             },
-//           }}
-//         >
-//           {children}
-//         </Box>
-//       </Box>
-//     </Box>
-//   );
-// };
+import { useAppSelector } from 'hooks';
+import { Link, Outlet } from 'react-router-dom';
+import { getProfile } from 'api';
+import { useQuery } from 'react-query';
+import { useSnackbar } from 'notistack';
 
 const openedMixin = (
   theme: Theme,
@@ -226,8 +129,19 @@ export const AppLayout = ({
   children,
 }: PropsWithChildren) => {
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = React.useState(false);
-
+  const { data } = useQuery(
+    'getProfile',
+    getProfile,
+    {
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
+    },
+  );
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -235,6 +149,9 @@ export const AppLayout = ({
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const { user, isAuthenticated } =
+    useAppSelector((state) => state.auth);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -256,15 +173,43 @@ export const AppLayout = ({
           <Typography
             variant="h6"
             noWrap
-            component="div"
+            component="h1"
           >
-            {/* fix */}
-            jdsn
+            Mjolnir - FileApi
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
+          <Link to="/app/profile">
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <AccountCircle
+                color="action"
+                sx={{
+                  fontSize: 30,
+                }}
+              />
+              <Typography
+                component="h2"
+                variant="h6"
+                color="textSecondary"
+                sx={{
+                  textTransform: 'capitalize',
+                  marginX: 1,
+                }}
+                noWrap
+              >
+                {data?.user.userName}
+              </Typography>
+            </Box>
+          </Link>
+
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? (
               <ChevronRight />
@@ -273,59 +218,65 @@ export const AppLayout = ({
             )}
           </IconButton>
         </DrawerHeader>
-
-        {/* fix */}
         <Divider />
+        {data?.user.role === USER_ROLES.ADMIN && (
+          <List>
+            {ADMIN_DRAWER_MENU.map(
+              (item, index) => (
+                <ListItem
+                  key={`drawer_${item.name}_${index}`}
+                  disablePadding
+                  sx={{ display: 'block' }}
+                >
+                  <Link
+                    to={item.path}
+                    className="drawer-link"
+                  >
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open
+                          ? 'initial'
+                          : 'center',
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent:
+                            'center',
+                        }}
+                      >
+                        <item.icon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.name}
+                        sx={{
+                          opacity: open ? 1 : 0,
+                        }}
+                      />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              ),
+            )}
+          </List>
+        )}
+        {user.role === USER_ROLES.ADMIN && (
+          <Divider />
+        )}
         <List>
-          {[
-            'Inbox',
-            'Starred',
-            'Send email',
-            'Drafts',
-          ].map((text, index) => (
+          {DRAWER_MENU.map((item, index) => (
             <ListItem
-              key={text}
+              key={`drawer_${item.name}_${index}`}
               disablePadding
               sx={{ display: 'block' }}
             >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open
-                    ? 'initial'
-                    : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? (
-                    <Inbox />
-                  ) : (
-                    <Mail />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map(
-            (text, index) => (
-              <ListItem
-                key={text}
-                disablePadding
-                sx={{ display: 'block' }}
+              <Link
+                to={item.path}
+                className="drawer-link"
               >
                 <ListItemButton
                   sx={{
@@ -343,29 +294,24 @@ export const AppLayout = ({
                       justifyContent: 'center',
                     }}
                   >
-                    {index % 2 === 0 ? (
-                      <Inbox />
-                    ) : (
-                      <Mail />
-                    )}
+                    <item.icon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={text}
+                    primary={item.name}
                     sx={{ opacity: open ? 1 : 0 }}
                   />
                 </ListItemButton>
-              </ListItem>
-            ),
-          )}
+              </Link>
+            </ListItem>
+          ))}
         </List>
       </Drawer>
-      {/* fix end */}
       <Box
         component="main"
         sx={{ flexGrow: 1, p: 3 }}
       >
         <DrawerHeader />
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );

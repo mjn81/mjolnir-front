@@ -2,7 +2,7 @@ import { AppLayout } from 'layouts';
 import React from 'react';
 
 const HomePage = () => {
-  return <AppLayout>HomePage</AppLayout>;
+  return <>HomePage</>;
 };
 
 export default HomePage;
