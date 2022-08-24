@@ -30,7 +30,12 @@ export const RouteManager = () => {
           element={<AuthRouter />}
         />
         {!isAuthenticated ? (
-          <Navigate to="/auth/login" />
+          <Route
+            path="app/*"
+            element={
+              <Navigate to="/auth/login" />
+            }
+          />
         ) : (
           <Route
             path="app/*"
@@ -38,8 +43,14 @@ export const RouteManager = () => {
           />
         )}
         {!isAuthenticated &&
+        user &&
         user.role === USER_ROLES.ADMIN ? (
-          <Navigate to="/auth/login" />
+          <Route
+            path="admin/*"
+            element={
+              <Navigate to="/auth/login" />
+            }
+          />
         ) : (
           <Route
             path="admin/*"

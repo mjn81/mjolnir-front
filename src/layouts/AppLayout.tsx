@@ -272,9 +272,10 @@ export const AppLayout = ({
             )}
           </List>
         )}
-        {user.role === USER_ROLES.ADMIN && (
-          <Divider />
-        )}
+        {user &&
+          user.role === USER_ROLES.ADMIN && (
+            <Divider />
+          )}
         <List>
           {DRAWER_MENU.map((item, index) => (
             <ListItem
