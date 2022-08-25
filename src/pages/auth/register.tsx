@@ -23,23 +23,29 @@ import { setAuth, store } from 'context';
 
 const RegisterPage = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { mutate } = useMutation(postRegister, {
-    onSuccess: ({ data }) => {
-      store.dispatch(setAuth(data));
-      enqueueSnackbar(data.message, {
-        variant: ALERT_TYPES.SUCCESS,
-      });
+  const { mutateAsync } = useMutation(
+    postRegister,
+    {
+      onSuccess: ({ data }) => {
+        store.dispatch(setAuth(data));
+        enqueueSnackbar(data.message, {
+          variant: ALERT_TYPES.SUCCESS,
+        });
+      },
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
     },
-    onError: ({ message }) => {
-      enqueueSnackbar(message, {
-        variant: ALERT_TYPES.ERROR,
-      });
-    },
-  });
+  );
   const handleRegister = (
     values: RegisterForm,
+    { setSubmitting },
   ) => {
-    mutate(values);
+    mutateAsync(values).then(() =>
+      setSubmitting(false),
+    );
   };
 
   return (

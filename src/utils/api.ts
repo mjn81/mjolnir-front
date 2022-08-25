@@ -1,14 +1,14 @@
 import { store } from 'context';
-import axios from 'axios';
+import Axios from 'axios';
 
-const axiosInstance = axios.create({
+const axios = Axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 export const getWithToken = async (
   uri: string,
 ) => {
-  return axiosInstance
+  return axios
     .get(uri, {
       headers: {
         Authorization:
@@ -22,7 +22,7 @@ export const postWithToken = async (
   uri: string,
   data: any,
 ) => {
-  return axiosInstance
+  return axios
     .post(uri, data, {
       headers: {
         Authorization:
@@ -32,15 +32,11 @@ export const postWithToken = async (
     .then((res) => res.data);
 };
 
-export const post = (uri: string, data: any) => {
-  return axiosInstance.post(uri, data);
-};
-
 export const putWithToken = async (
   uri: string,
   data: any,
 ) => {
-  return axiosInstance
+  return axios
     .put(uri, data, {
       headers: {
         Authorization:
@@ -53,7 +49,7 @@ export const putWithToken = async (
 export const deleteWithToken = async (
   uri: string,
 ) => {
-  return await axiosInstance
+  return axios
     .delete(uri, {
       headers: {
         Authorization:
@@ -61,4 +57,15 @@ export const deleteWithToken = async (
       },
     })
     .then((res) => res.data);
+};
+
+export const post = async (
+  uri: string,
+  data: any,
+) => {
+  return axios.post(uri, data);
+};
+
+export const get = async (uri: string) => {
+  return axios.get(uri);
 };

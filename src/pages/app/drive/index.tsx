@@ -4,17 +4,16 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-  deleteCategory,
-  getCategories,
-} from 'api';
-import { TableGenerator } from 'components';
+import { getDrive } from 'api';
 import {
   ALERT_TYPES,
   CATEGORY_COLUMNS,
 } from 'constants/index';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
   useMutation,
   useQuery,
@@ -27,27 +26,15 @@ import {
 const Drive = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
-  const { data, isLoading, refetch } = useQuery(
-    'getCategories',
-    getCategories,
+  const [id, setId] = useState();
+  const { data, refetch } = useQuery(
+    'getDrive',
+    () => getDrive(id),
   );
-
-  const { mutateAsync } = useMutation(
-    'deleteCategory',
-    deleteCategory,
-    {
-      onSuccess: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.SUCCESS,
-        });
-      },
-      onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
-      },
-    },
-  );
+  console.log(data);
+  useEffect(() => {
+    refetch();
+  }, [id]);
   return (
     <div>
       <Box
@@ -74,7 +61,6 @@ const Drive = () => {
           </Button>
         </Link>
       </Box>
-      {!isLoading}
     </div>
   );
 };
