@@ -87,26 +87,28 @@ const LoginPage = () => {
             {({
               values,
               errors,
+              touched,
               isSubmitting,
             }) => (
               <Form>
                 <Box>
                   {Object.keys(errors).length >
                     0 &&
-                    Object.values(errors).map(
-                      (message, index) => (
-                        <Alert
-                          sx={{
-                            mt: 1,
-                          }}
-                          severity={
-                            ALERT_TYPES.ERROR
-                          }
-                          key={`er_log_${index}`}
-                        >
-                          {message}
-                        </Alert>
-                      ),
+                    Object.keys(errors).map(
+                      (key, index) =>
+                        touched[key] && (
+                          <Alert
+                            sx={{
+                              mt: 1,
+                            }}
+                            severity={
+                              ALERT_TYPES.ERROR
+                            }
+                            key={`er_log_${index}`}
+                          >
+                            {errors[key]}
+                          </Alert>
+                        ),
                     )}
                 </Box>
                 <Field
