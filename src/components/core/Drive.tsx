@@ -6,13 +6,7 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import { FOLDER_MENU_ITEMS } from 'constants/index';
-import { useContextMenu } from 'hooks';
 import React from 'react';
-import {
-  ContextMenu,
-  ContextMenuWrapper,
-} from './Context';
 
 type FolderItemProps = {
   name: string;
@@ -25,15 +19,9 @@ export const DriveFolderItem = ({
   name,
   id,
   setId,
+
   ...others
 }: FolderItemProps) => {
-  const {
-    contextMenu,
-    setContextMenu,
-    handleContextMenu,
-    handleClose,
-  } = useContextMenu();
-
   const handleDoubleClick = () => {
     setId(id);
   };
@@ -58,31 +46,20 @@ export const DriveFolderItem = ({
         borderRadius: 3,
       }}
     >
-      <ContextMenuWrapper
-        handleContextMenu={handleContextMenu}
-        handleClose={handleClose}
+      <Folder
+        sx={{
+          fontSize: 100,
+          color: '#777',
+        }}
+      />
+      <Typography
+        variant="h6"
+        textTransform="none"
+        color="#333"
+        fontSize={14}
       >
-        <Folder
-          sx={{
-            fontSize: 100,
-            color: '#777',
-          }}
-        />
-        <Typography
-          variant="h6"
-          textTransform="none"
-          color="#333"
-          fontSize={14}
-        >
-          {name}
-        </Typography>
-
-        <ContextMenu
-          contextMenu={contextMenu}
-          setContextMenu={setContextMenu}
-          options={FOLDER_MENU_ITEMS}
-        />
-      </ContextMenuWrapper>
+        {name}
+      </Typography>
     </Button>
   );
 };

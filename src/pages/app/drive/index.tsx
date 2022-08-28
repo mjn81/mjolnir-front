@@ -24,28 +24,39 @@ import {
   DriveFileItem,
   DriveFolderItem,
 } from 'components';
-import { DRIVE_MENU_ITEMS } from 'constants/index';
+import {
+  ALERT_TYPES,
+  DRIVE_MENU_ITEMS,
+} from 'constants/index';
 import { useContextMenu } from 'hooks';
 
 const Drive = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
+  const [parentId, setParentId] = useState('');
   const [id, setId] = useState('');
-  const { data, refetch } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     'getDrive',
     () => getDrive(id),
   );
   useEffect(() => {
-    refetch();
+    refetch()
+      .then(({ data }) => {
+        setParentId(data.parentId ?? null);
+      })
+      .catch(() => {
+        enqueueSnackbar('Error', {
+          variant: ALERT_TYPES.ERROR,
+        });
+      });
   }, [id]);
-
   const {
     contextMenu,
     setContextMenu,
     handleContextMenu,
     handleClose,
   } = useContextMenu();
-
+  // improve performance
   return (
     <div>
       <Box
@@ -80,7 +91,16 @@ const Drive = () => {
           component="section"
           className="grid drive-full-height"
         >
-          {data?.data &&
+          {!isLoading && id && (
+            <DriveFolderItem
+              id={parentId}
+              setId={setId}
+              name="..."
+              key={`back_folder_${id}`}
+            />
+          )}
+          {!isLoading &&
+            data?.data &&
             data.data.map(({ id, type, name }) =>
               type === 'folder' ? (
                 <DriveFolderItem
