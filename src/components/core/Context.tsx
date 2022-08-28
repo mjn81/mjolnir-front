@@ -6,16 +6,15 @@ import {
 import { Box } from '@mui/system';
 import React from 'react';
 
+export type ContextMenuType = {
+  mouseX: number;
+  mouseY: number;
+} | null;
+
 type ContextMenuProps = {
-  contextMenu: {
-    mouseX: number;
-    mouseY: number;
-  } | null;
+  contextMenu: ContextMenuType;
   setContextMenu: (
-    contextMenu: {
-      mouseX: number;
-      mouseY: number;
-    } | null,
+    contextMenu: ContextMenuType,
   ) => void;
   options: {
     label: string;

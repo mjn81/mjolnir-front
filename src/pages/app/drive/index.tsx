@@ -17,27 +17,27 @@ import {
   useMutation,
   useQuery,
 } from 'react-query';
+import { Link } from 'react-router-dom';
 import {
-  Link,
-  useNavigate,
-} from 'react-router-dom';
-import {
+  ConfirmModal,
   ContextMenu,
   ContextMenuWrapper,
   DriveFileItem,
   DriveFolderItem,
-  Modal,
+  FormModal,
 } from 'components';
 import {
   ALERT_TYPES,
   CREATE_FOLDER_DRIVE_MODAL_ID,
   CREATE_FOLDER_FIELDS,
   CREATE_FOLDER_VALIDATOR,
+  DELETE_FOLDER_DRIVE_MODAL_ID,
 } from 'constants/index';
 import { useContextMenu } from 'hooks';
 import useModal from 'hooks/useModal';
 
 const Drive = () => {
+  // snackbar
   const { enqueueSnackbar } = useSnackbar();
 
   // fetching directory logic
@@ -63,7 +63,6 @@ const Drive = () => {
   useEffect(() => {
     refetchCurrentDirectory();
   }, [id]);
-
   const { mutateAsync } = useMutation(
     'createFolder',
     postCreateFolder,
@@ -84,6 +83,31 @@ const Drive = () => {
   const { isOpen, openModal, closeModal } =
     useModal();
 
+  const {
+    isOpen: isOpenDeleteFolder,
+    openModal: openDeleteFolderModal,
+    closeModal: closeDeleteFolderModal,
+  } = useModal();
+
+  // add on phase 2
+  const DeleteModalActions = React.useMemo(
+    () => [
+      {
+        label: 'Yes',
+        onClick: () => {
+          closeDeleteFolderModal();
+        },
+      },
+      {
+        label: 'No',
+        onClick: () => {
+          closeDeleteFolderModal();
+        },
+      },
+    ],
+    [],
+  );
+
   // context logic
 
   const {
@@ -103,6 +127,7 @@ const Drive = () => {
     ],
     [],
   );
+
   // improve performance
   return (
     <div>
@@ -140,6 +165,7 @@ const Drive = () => {
         >
           {!isLoading && id && (
             <DriveFolderItem
+              openModal={openDeleteFolderModal}
               id={parentId}
               setId={setId}
               name="..."
@@ -155,6 +181,9 @@ const Drive = () => {
                   setId={setId}
                   name={name}
                   key={`folder_${id}`}
+                  openModal={
+                    openDeleteFolderModal
+                  }
                 />
               ) : (
                 <DriveFileItem
@@ -162,6 +191,9 @@ const Drive = () => {
                   setId={setId}
                   name={name}
                   key={`file_${id}`}
+                  openModal={
+                    openDeleteFolderModal
+                  }
                 />
               ),
             )}
@@ -172,7 +204,8 @@ const Drive = () => {
           options={DriveMenuItems}
         />
       </ContextMenuWrapper>
-      <Modal
+
+      <FormModal
         id={CREATE_FOLDER_DRIVE_MODAL_ID}
         title="new folder"
         context="create new folder here"
@@ -182,7 +215,7 @@ const Drive = () => {
           fields: CREATE_FOLDER_FIELDS,
           initialValues: {
             name: '',
-            parent: parentId,
+            parent: id,
           },
           validator: CREATE_FOLDER_VALIDATOR,
           submitBtn: <span>submit</span>,
@@ -193,6 +226,15 @@ const Drive = () => {
             });
           },
         }}
+      />
+
+      <ConfirmModal
+        open={isOpenDeleteFolder}
+        handleClose={closeDeleteFolderModal}
+        title="delete folder"
+        context="are you sure you want to delete this folder?"
+        actions={DeleteModalActions}
+        id={DELETE_FOLDER_DRIVE_MODAL_ID}
       />
     </div>
   );

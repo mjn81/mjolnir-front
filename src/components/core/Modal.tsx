@@ -9,7 +9,6 @@ import {
   Slide,
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import { FieldsType } from 'constants/index';
 import {
   Generator,
   GeneratorProps,
@@ -32,7 +31,7 @@ const Transition = React.forwardRef(
   },
 );
 
-type ModalProps = {
+export type FormModalProps = {
   id: string;
   open: boolean;
   handleClose: () => void;
@@ -41,14 +40,14 @@ type ModalProps = {
   form?: GeneratorProps;
 };
 
-export const Modal = ({
+export const FormModal = ({
   id,
   open,
   handleClose,
   title,
   context,
   form,
-}: ModalProps) => {
+}: FormModalProps) => {
   return (
     <Dialog
       open={open}
@@ -72,6 +71,53 @@ export const Modal = ({
           />
         )}
       </DialogContent>
+    </Dialog>
+  );
+};
+
+export type ConfirmModalAction = {
+  label: string;
+  onClick: () => void;
+};
+
+export type ConfirmModalProps = {
+  id: string;
+  open: boolean;
+  handleClose: () => void;
+  title: string;
+  context: string;
+  actions: ConfirmModalAction[];
+};
+
+export const ConfirmModal = ({
+  id,
+  open,
+  handleClose,
+  title,
+  context,
+  actions,
+}: ConfirmModalProps) => {
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      keepMounted
+      TransitionComponent={Transition}
+      aria-describedby={id}
+    >
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id={id}>
+          {context}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        {actions.map(({ label, onClick }) => (
+          <Button key={label} onClick={onClick}>
+            {label}
+          </Button>
+        ))}
+      </DialogActions>
     </Dialog>
   );
 };
