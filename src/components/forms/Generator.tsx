@@ -19,7 +19,7 @@ import {
 import { AnyObjectSchema } from 'yup';
 import { FieldsType } from 'constants/index';
 
-type Props = {
+export type GeneratorProps = {
   submit: (data: any, helpers: any) => any;
   initialValues: {
     [inp: string]: any;
@@ -35,7 +35,7 @@ export const Generator = ({
   validator,
   submitBtn,
   submit,
-}: Props) => {
+}: GeneratorProps) => {
   return (
     <Formik
       initialValues={initialValues}

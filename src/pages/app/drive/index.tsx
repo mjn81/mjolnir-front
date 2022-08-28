@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { getDrive } from 'api';
+import { getDrive, postCreateFolder } from 'api';
 import { useSnackbar } from 'notistack';
 import React, {
   useEffect,
@@ -39,14 +39,17 @@ import useModal from 'hooks/useModal';
 
 const Drive = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const navigation = useNavigate();
+
+  // fetching directory logic
+
   const [parentId, setParentId] = useState('');
   const [id, setId] = useState('');
   const { data, isLoading, refetch } = useQuery(
     'getDrive',
     () => getDrive(id),
   );
-  useEffect(() => {
+
+  const refetchCurrentDirectory = () => {
     refetch()
       .then(({ data }) => {
         setParentId(data.parentId ?? null);
@@ -56,7 +59,33 @@ const Drive = () => {
           variant: ALERT_TYPES.ERROR,
         });
       });
+  };
+  useEffect(() => {
+    refetchCurrentDirectory();
   }, [id]);
+
+  const { mutateAsync } = useMutation(
+    'createFolder',
+    postCreateFolder,
+    {
+      onSuccess: () => {
+        refetchCurrentDirectory();
+      },
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
+    },
+  );
+
+  // modal logic
+
+  const { isOpen, openModal, closeModal } =
+    useModal();
+
+  // context logic
+
   const {
     contextMenu,
     setContextMenu,
@@ -64,8 +93,6 @@ const Drive = () => {
     handleClose,
   } = useContextMenu();
 
-  const { isOpen, openModal, closeModal } =
-    useModal();
   const DriveMenuItems = React.useMemo(
     () => [
       {
@@ -159,7 +186,12 @@ const Drive = () => {
           },
           validator: CREATE_FOLDER_VALIDATOR,
           submitBtn: <span>submit</span>,
-          onSubmit: (data) => {},
+          submit: (data, { setSubmitting }) => {
+            mutateAsync(data).finally(() => {
+              setSubmitting(false);
+              closeModal();
+            });
+          },
         }}
       />
     </div>

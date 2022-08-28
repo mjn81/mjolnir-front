@@ -10,7 +10,10 @@ import {
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { FieldsType } from 'constants/index';
-import { Generator } from 'components/forms';
+import {
+  Generator,
+  GeneratorProps,
+} from 'components/forms';
 
 const Transition = React.forwardRef(
   function Transition(
@@ -35,13 +38,7 @@ type ModalProps = {
   handleClose: () => void;
   title: string;
   context: string;
-  form?: {
-    fields: FieldsType;
-    onSubmit: (data: any) => void;
-    initialValues: any;
-    validator: any;
-    submitBtn: React.ReactElement;
-  };
+  form?: GeneratorProps;
 };
 
 export const Modal = ({
@@ -69,7 +66,7 @@ export const Modal = ({
           <Generator
             initialValues={form.initialValues}
             fields={form.fields}
-            submit={form.onSubmit}
+            submit={form.submit}
             validator={form.validator}
             submitBtn={form.submitBtn}
           />
