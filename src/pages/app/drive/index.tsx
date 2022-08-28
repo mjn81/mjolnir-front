@@ -1,4 +1,7 @@
-import { Upload } from '@mui/icons-material';
+import {
+  CreateNewFolder,
+  Upload,
+} from '@mui/icons-material';
 import {
   Button,
   Typography,
@@ -23,12 +26,16 @@ import {
   ContextMenuWrapper,
   DriveFileItem,
   DriveFolderItem,
+  Modal,
 } from 'components';
 import {
   ALERT_TYPES,
-  DRIVE_MENU_ITEMS,
+  CREATE_FOLDER_DRIVE_MODAL_ID,
+  CREATE_FOLDER_FIELDS,
+  CREATE_FOLDER_VALIDATOR,
 } from 'constants/index';
 import { useContextMenu } from 'hooks';
+import useModal from 'hooks/useModal';
 
 const Drive = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -56,6 +63,19 @@ const Drive = () => {
     handleContextMenu,
     handleClose,
   } = useContextMenu();
+
+  const { isOpen, openModal, closeModal } =
+    useModal();
+  const DriveMenuItems = React.useMemo(
+    () => [
+      {
+        label: 'New Folder',
+        Icon: CreateNewFolder,
+        onClick: openModal,
+      },
+    ],
+    [],
+  );
   // improve performance
   return (
     <div>
@@ -122,9 +142,26 @@ const Drive = () => {
         <ContextMenu
           contextMenu={contextMenu}
           setContextMenu={setContextMenu}
-          options={DRIVE_MENU_ITEMS}
+          options={DriveMenuItems}
         />
       </ContextMenuWrapper>
+      <Modal
+        id={CREATE_FOLDER_DRIVE_MODAL_ID}
+        title="new folder"
+        context="create new folder here"
+        open={isOpen}
+        handleClose={closeModal}
+        form={{
+          fields: CREATE_FOLDER_FIELDS,
+          initialValues: {
+            name: '',
+            parent: parentId,
+          },
+          validator: CREATE_FOLDER_VALIDATOR,
+          submitBtn: <span>submit</span>,
+          onSubmit: (data) => {},
+        }}
+      />
     </div>
   );
 };

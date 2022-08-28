@@ -42,3 +42,13 @@ export const CREATE_CATEGORY_VALIDATOR =
 export type CreateCategorySchema = Yup.InferType<
   typeof CREATE_CATEGORY_VALIDATOR
 >;
+
+export const CREATE_FOLDER_VALIDATOR = Yup.object(
+  {
+    name: Yup.string().required(),
+  },
+).required();
+
+export type CreateFolderSchema = Yup.InferType<
+  typeof CREATE_FOLDER_VALIDATOR
+>;
