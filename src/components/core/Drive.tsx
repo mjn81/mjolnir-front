@@ -32,7 +32,6 @@ export const DriveFolderItem = ({
   const handleDoubleClick = () => {
     setId(id);
   };
-
   const {
     contextMenu,
     handleClose,
@@ -132,11 +131,18 @@ export const DriveFileItem = ({
     >
       <InsertDriveFileOutlined
         sx={{
-          fontSize: 140,
+          fontSize: 100,
           color: '#777',
         }}
       />
-      <Typography variant="h5">{name}</Typography>
+      <Typography
+        variant="h6"
+        textTransform="none"
+        color="#333"
+        fontSize={14}
+      >
+        {name}
+      </Typography>
     </Button>
   );
 };

@@ -16,3 +16,11 @@ export const postCreateFolder = async (data: {
     ...data,
   });
 };
+
+export const postCreateFile = async (
+  data: any,
+) => {
+  return await postWithToken('/file', data, {
+    'Content-Type': 'multipart/form-data',
+  });
+};

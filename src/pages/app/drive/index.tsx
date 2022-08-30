@@ -97,6 +97,7 @@ const Drive = () => {
         onClick: () => {
           closeDeleteFolderModal();
         },
+        color: 'error',
       },
       {
         label: 'No',
@@ -141,7 +142,7 @@ const Drive = () => {
         <Typography variant="h6" component="p">
           Drive
         </Typography>
-        <Link to="upload">
+        <Link to={`upload/${id}`}>
           <Button
             variant="contained"
             startIcon={<Upload />}
@@ -163,7 +164,7 @@ const Drive = () => {
           component="section"
           className="grid drive-full-height"
         >
-          {!isLoading && id && (
+          {!isLoading && !!id && (
             <DriveFolderItem
               openModal={openDeleteFolderModal}
               id={parentId}

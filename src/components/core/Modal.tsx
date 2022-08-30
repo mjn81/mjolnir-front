@@ -78,6 +78,7 @@ export const FormModal = ({
 export type ConfirmModalAction = {
   label: string;
   onClick: () => void;
+  [inp: string]: any;
 };
 
 export type ConfirmModalProps = {
@@ -112,11 +113,17 @@ export const ConfirmModal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        {actions.map(({ label, onClick }) => (
-          <Button key={label} onClick={onClick}>
-            {label}
-          </Button>
-        ))}
+        {actions.map(
+          ({ label, onClick, ...others }) => (
+            <Button
+              key={label}
+              onClick={onClick}
+              {...others}
+            >
+              {label}
+            </Button>
+          ),
+        )}
       </DialogActions>
     </Dialog>
   );

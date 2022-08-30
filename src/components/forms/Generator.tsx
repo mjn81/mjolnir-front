@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Button,
+  Select,
   TextField,
 } from '@mui/material';
 import {
@@ -18,6 +19,10 @@ import {
 } from 'formik';
 import { AnyObjectSchema } from 'yup';
 import { FieldsType } from 'constants/index';
+import {
+  FileDropField,
+  SelectField,
+} from 'components/core';
 
 export type GeneratorProps = {
   submit: (data: any, helpers: any) => any;
@@ -47,22 +52,24 @@ export const Generator = ({
         isSubmitting,
         errors,
         setFieldValue,
+        touched,
       }) => (
         <Form>
           <Box sx={{ marginBottom: 2 }}>
             {Object.keys(errors).length > 0 &&
-              Object.values(errors).map(
-                (message, index) => (
-                  <Alert
-                    sx={{
-                      mt: 1,
-                    }}
-                    severity={ALERT_TYPES.ERROR}
-                    key={`er_log_${index}`}
-                  >
-                    {message as string}
-                  </Alert>
-                ),
+              Object.keys(errors).map(
+                (key, index) =>
+                  touched[key] && (
+                    <Alert
+                      sx={{
+                        mt: 1,
+                      }}
+                      severity={ALERT_TYPES.ERROR}
+                      key={`er_log_${index}`}
+                    >
+                      {errors[key] as string}
+                    </Alert>
+                  ),
               )}
           </Box>
           {fields.map(
@@ -102,6 +109,7 @@ type FieldProps = {
 
 const FieldGenerator = ({
   fieldType,
+  name,
   setField,
   ...others
 }: FieldProps) => {
@@ -112,25 +120,18 @@ const FieldGenerator = ({
           as={TextField}
           variant="outlined"
           fullWidth
+          name={name}
           sx={{
             marginBottom: 2,
           }}
           {...others}
         />
       );
-    // case FormFieldTypes.select:
-    //   return (
-    //     <Field
-    //       as={SelectField}
-    //       setValue={setField}
-    //       {...others}
-    //     />
-    //   );
-    // case FormFieldTypes.date:
-    // return <DateField {...others} />;
-    // case FormFieldTypes.multiselect:
-    // return <MultipleSelect {...others} />;
-    // case FormFieldTypes.file:
-    // return <FileDrop {...others} />;
+    case FormFieldTypes.select:
+      return (
+        <SelectField name={name} {...others} />
+      );
+    case FormFieldTypes.file:
+      return <FileDropField name={name} />;
   }
 };

@@ -21,12 +21,14 @@ export const getWithToken = async (
 export const postWithToken = async (
   uri: string,
   data: any,
+  headers?: object,
 ) => {
   return axios
     .post(uri, data, {
       headers: {
         Authorization:
           store.getState().auth.token,
+        ...headers,
       },
     })
     .then((res) => res.data);
