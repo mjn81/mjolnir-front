@@ -19,3 +19,7 @@ export const postLogin = async (
 export const getProfile = async () => {
   return await getWithToken('auth/me');
 };
+
+export const getDistToken = async () => {
+  return await getWithToken('auth/distToken');
+};

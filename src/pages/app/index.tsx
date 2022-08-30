@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { AppLayout } from 'layouts';
 import Loading from 'pages/loading';
+import Settings from './settings';
 const HomePage = React.lazy(
   () => import('./home'),
 );
@@ -44,6 +45,10 @@ const AppRouter = () => {
           <Route
             path="drive/upload"
             element={<Upload />}
+          />
+          <Route
+            path="/settings"
+            element={<Settings />}
           />
         </Route>
       </Routes>
