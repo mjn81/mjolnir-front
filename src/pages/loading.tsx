@@ -2,7 +2,7 @@ import React from 'react';
 
 const Loading = () => {
   return (
-    <div className="loading-page">
+    <div className="loading-pimport('./landing')age">
       <div className="loader">
         <svg
           version="1.1"

@@ -1,30 +1,31 @@
-import {
-  Box,
-  Button,
-  List,
-  ListItem,
-  MenuList,
-} from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import 'styles/landing.css';
 
 const LandingPage = () => {
+  // reshape to mui best practice later ...
   return (
-    <Box>
-      <List>
-        <ListItem>
-          <Button variant="contained">
-            <Link to="/auth/login">Login</Link>
-          </Button>
-        </ListItem>
-        <ListItem>
-          <Link to="/auth/register">
-            Register
+    <main className="main-page">
+      <div className="content">
+        <h1 className="title">
+          New
+          <span className="w-blue">Cloud</span>
+          Server plus distribution api for free
+          for 3 months
+        </h1>
+        <div className="holder">
+          <Link className="btn" to="/auth/login">
+            login
           </Link>
-        </ListItem>
-      </List>
-      LandingPage
-    </Box>
+          <Link
+            className="btn"
+            to="/auth/register"
+          >
+            signup
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 };
 
