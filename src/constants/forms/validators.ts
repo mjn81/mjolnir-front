@@ -20,7 +20,7 @@ export const REGISTER_VALIDATOR = Yup.object({
     .required('Email is required'),
   password: Yup.string()
     .min(5)
-    .max(8)
+    .max(9)
     .required('Password is required'),
   fullName: Yup.string().required(
     'Full name is required',
