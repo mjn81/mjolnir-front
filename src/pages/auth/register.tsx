@@ -17,12 +17,16 @@ import {
 import { Field, Form, Formik } from 'formik';
 import { AuthLayout } from 'layouts';
 import { useMutation } from 'react-query';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { setAuth, store } from 'context';
 
 const RegisterPage = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const navigation = useNavigate();
   const { mutateAsync } = useMutation(
     postRegister,
     {
@@ -30,6 +34,9 @@ const RegisterPage = () => {
         store.dispatch(setAuth(data));
         enqueueSnackbar(data.message, {
           variant: ALERT_TYPES.SUCCESS,
+        });
+        navigation('/app', {
+          replace: true,
         });
       },
       onError: ({ message }) => {
@@ -43,7 +50,7 @@ const RegisterPage = () => {
     values: RegisterForm,
     { setSubmitting },
   ) => {
-    mutateAsync(values).then(() =>
+    mutateAsync(values).finally(() =>
       setSubmitting(false),
     );
   };
