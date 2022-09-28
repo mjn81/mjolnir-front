@@ -3,11 +3,11 @@ import React from 'react';
 
 const LandingPage = () => {
   return (
-    <main className="bg-cblack text-center w-screen h-screen">
+    <main className="bg-neutral-focus  text-center w-screen h-screen">
       <div className="space-y-8 w-full h-full flex flex-col justify-center items-center">
-        <h1 className="text-5xl text-cwhite">
+        <h1 className="text-5xl text-white">
           New
-          <span className="text-primary">
+          <span className="text-primary mx-3">
             Cloud
           </span>
           Server plus distribution api for free

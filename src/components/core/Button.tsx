@@ -4,35 +4,58 @@ import React, {
 } from 'react';
 import { Link } from 'react-router-dom';
 
+type ButtonProps = {
+  onClick?: (e: MouseEvent) => void;
+  disabled: boolean;
+  type?: 'button' | 'submit' | 'reset';
+} & PropsWithChildren;
+
 export const Button = ({
-  children,
   onClick,
-}: {
-  onClick: (e: MouseEvent) => void;
-} & PropsWithChildren) => {
+  type,
+  disabled,
+  children,
+}: ButtonProps) => {
   return (
     <button
-      className="btn"
+      className="btn btn-primary w-full"
       onClick={(e: MouseEvent) => {
-        e.preventDefault();
-        onClick(e);
+        onClick && onClick(e);
       }}
+      type={type}
+      disabled={disabled}
     >
       {children}
     </button>
   );
 };
 
+type LinkProps = {
+  path: string;
+} & PropsWithChildren;
+
 export const ButtonLink = ({
   path,
   children,
-}: {
-  path: string;
-} & PropsWithChildren) => {
+}: LinkProps) => {
   return (
     <Link
-      className="btn text-cwhite capitalize text-xl  bg-primary border-primary hover:bg-hoverprimary hover:border-hoverprimary px-8"
+      className="btn btn-primary px-10 text-lg"
       to={path}
+    >
+      {children}
+    </Link>
+  );
+};
+
+export const SimpleLink = ({
+  path,
+  children,
+}: LinkProps) => {
+  return (
+    <Link
+      to={path}
+      className="text-primary capitalize transition-colors hover:text-primary-focus"
     >
       {children}
     </Link>

@@ -1,22 +1,11 @@
 import React from 'react';
 import {
-  Alert,
-  Box,
   Button,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
-import {
-  Form,
-  Formik,
-  Field,
-  ErrorMessage,
-} from 'formik';
-import {
-  Link,
-  useNavigate,
-} from 'react-router-dom';
+  SimpleLink,
+  TextInput,
+} from 'components';
+import { Form, Formik, Field } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useSnackbar } from 'notistack';
 
@@ -25,12 +14,10 @@ import {
   LoginForm,
   LOGIN_INITIAL_VALUES,
   LOGIN_VALIDATOR,
-  MESSAGE,
 } from 'constants/index';
 import { AuthLayout } from 'layouts';
 import { setAuth, store } from 'context';
 import { postLogin } from 'api';
-import { log } from 'console';
 
 const LoginPage = () => {
   const navigation = useNavigate();
@@ -56,103 +43,83 @@ const LoginPage = () => {
     mutateAsync(values).finally(() => {
       setSubmitting(false);
     });
+    console.log(values);
   };
 
   return (
     <AuthLayout>
-      <Box
-        sx={{
-          my: 8,
-          mx: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography
-          gutterBottom
-          component="h1"
-          variant="h3"
-          color={'primary'}
-          fontWeight={'bold'}
-        >
-          Login.
-        </Typography>
-        <Box>
-          <Formik
-            initialValues={LOGIN_INITIAL_VALUES}
-            validationSchema={LOGIN_VALIDATOR}
-            onSubmit={handleLogin}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              isSubmitting,
-            }) => (
-              <Form>
-                <Box>
-                  {Object.keys(errors).length >
-                    0 &&
-                    Object.keys(errors).map(
-                      (key, index) =>
-                        touched[key] && (
-                          <Alert
-                            sx={{
-                              mt: 1,
-                            }}
-                            severity={
-                              ALERT_TYPES.ERROR
-                            }
-                            key={`er_log_${index}`}
-                          >
-                            {errors[key]}
-                          </Alert>
-                        ),
+      <section className="sm:w-[500px]  hero-content flex-col">
+        <section className="card w-full  shadow-xl bg-base-100">
+          <section className="card-body">
+            <h1 className="mb-6 capitalize font-semibold text-primary text-center text-5xl">
+              login
+            </h1>
+            <section className="form-control">
+              <Formik
+                initialValues={
+                  LOGIN_INITIAL_VALUES
+                }
+                validationSchema={LOGIN_VALIDATOR}
+                onSubmit={handleLogin}
+              >
+                {({
+                  values,
+                  errors,
+                  touched,
+                  isSubmitting,
+                }) => (
+                  <Form className="space-y-4">
+                    <Field
+                      as={TextInput}
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="Email Address"
+                    />
+                    <Field
+                      as={TextInput}
+                      type="password"
+                      name="password"
+                      required
+                      placeholder="Password"
+                    />
+                    {Object.keys(errors).length >
+                      0 && (
+                      <ul className="list-disc mx-5">
+                        {Object.keys(errors).map(
+                          (key, index) =>
+                            touched[key] && (
+                              <li
+                                className="text-error"
+                                key={`er_log_${index}`}
+                              >
+                                {errors[key]}
+                              </li>
+                            ),
+                        )}
+                      </ul>
                     )}
-                </Box>
-                <Field
-                  as={TextField}
-                  name="email"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Email Address"
-                />
-                <Field
-                  as={TextField}
-                  name="password"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Password"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ my: 2, padding: 1 }}
-                  disabled={isSubmitting}
-                >
-                  login
-                </Button>
-              </Form>
-            )}
-          </Formik>
-          <Grid container>
-            <Grid item xs>
-              <Link to="/auth/forget-password">
-                {MESSAGE['FORGET_PASSWORD_LINK']}
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link to="/auth/register">
-                {MESSAGE['SIGN_UP_LINK']}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      login
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+            </section>
+          </section>
+        </section>
+        <section className="w-full flex justify-between px-2">
+          <SimpleLink path="/auth/forget-pass">
+            dont have an account?
+          </SimpleLink>
+          <SimpleLink path="/auth/forget-pass">
+            forget password
+          </SimpleLink>
+        </section>
+      </section>
     </AuthLayout>
   );
 };
