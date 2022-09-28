@@ -1,28 +1,25 @@
+import { ButtonLink } from 'components';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import 'styles/landing.css';
 
 const LandingPage = () => {
-  // reshape to mui best practice later ...
   return (
-    <main className="main-page">
-      <div className="content">
-        <h1 className="title">
+    <main className="bg-cblack text-center w-screen h-screen">
+      <div className="space-y-8 w-full h-full flex flex-col justify-center items-center">
+        <h1 className="text-5xl text-cwhite">
           New
-          <span className="w-blue">Cloud</span>
+          <span className="text-primary">
+            Cloud
+          </span>
           Server plus distribution api for free
           for 3 months
         </h1>
-        <div className="holder">
-          <Link className="btn" to="/auth/login">
+        <div className="space-x-5 ">
+          <ButtonLink path="/auth/login">
             login
-          </Link>
-          <Link
-            className="btn"
-            to="/auth/register"
-          >
+          </ButtonLink>
+          <ButtonLink path="/auth/register">
             signup
-          </Link>
+          </ButtonLink>
         </div>
       </div>
     </main>
