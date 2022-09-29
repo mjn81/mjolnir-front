@@ -1,11 +1,9 @@
 import React from 'react';
 import {
-  Alert,
-  Box,
   Button,
-  TextField,
-  Typography,
-} from '@mui/material';
+  SimpleLink,
+  TextInput,
+} from 'components';
 import { postRegister } from 'api';
 import {
   ALERT_TYPES,
@@ -22,7 +20,6 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { setAuth, store } from 'context';
 
 const RegisterPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -31,7 +28,6 @@ const RegisterPage = () => {
     postRegister,
     {
       onSuccess: ({ data }) => {
-        store.dispatch(setAuth(data));
         enqueueSnackbar(data.message, {
           variant: ALERT_TYPES.SUCCESS,
         });
@@ -57,109 +53,90 @@ const RegisterPage = () => {
 
   return (
     <AuthLayout>
-      <Box
-        sx={{
-          my: 8,
-          mx: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography
-          gutterBottom
-          component="h1"
-          variant="h3"
-          color={'primary'}
-          fontWeight={'bold'}
-        >
-          Sign Up.
-        </Typography>
-        <Box>
-          <Formik
-            initialValues={
-              REGISTER_INITIAL_VALUES
-            }
-            validationSchema={REGISTER_VALIDATOR}
-            onSubmit={handleRegister}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              isSubmitting,
-            }) => (
-              <Form>
-                <Box>
-                  {Object.keys(errors).length >
-                    0 &&
-                    Object.keys(errors).map(
-                      (key, index) =>
-                        touched[key] && (
-                          <Alert
-                            sx={{
-                              mt: 1,
-                            }}
-                            severity={
-                              ALERT_TYPES.ERROR
-                            }
-                            key={`er_log_${index}`}
-                          >
-                            {errors[key]}
-                          </Alert>
-                        ),
+      <section className="sm:w-[500px]  hero-content flex-col">
+        <section className="card w-full  shadow-xl bg-base-100">
+          <section className="card-body">
+            <h1 className="mb-6 capitalize font-semibold text-primary text-center text-5xl">
+              signup
+            </h1>
+            <section className="form-control">
+              <Formik
+                initialValues={
+                  REGISTER_INITIAL_VALUES
+                }
+                validationSchema={
+                  REGISTER_VALIDATOR
+                }
+                onSubmit={handleRegister}
+              >
+                {({
+                  values,
+                  errors,
+                  touched,
+                  isSubmitting,
+                }) => (
+                  <Form className="space-y-4">
+                    <Field
+                      as={TextInput}
+                      name="fullName"
+                      required
+                      placeholder="Full Name"
+                    />
+                    <Field
+                      as={TextInput}
+                      name="userName"
+                      required
+                      placeholder="Username"
+                    />
+                    <Field
+                      as={TextInput}
+                      name="email"
+                      required
+                      placeholder="Email Address"
+                    />
+                    <Field
+                      as={TextInput}
+                      name="password"
+                      required
+                      placeholder="Password"
+                    />
+                    {Object.keys(errors).length >
+                      0 && (
+                      <ul className="list-disc mx-5">
+                        {Object.keys(errors).map(
+                          (key, index) =>
+                            touched[key] && (
+                              <li
+                                className="text-error"
+                                key={`er_log_${index}`}
+                              >
+                                {errors[key]}
+                              </li>
+                            ),
+                        )}
+                      </ul>
                     )}
-                </Box>
-                <Field
-                  as={TextField}
-                  name="fullName"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Full Name"
-                />
-                <Field
-                  as={TextField}
-                  name="userName"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Username"
-                />
-                <Field
-                  as={TextField}
-                  name="email"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Email Address"
-                />
-                <Field
-                  as={TextField}
-                  name="password"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="Password"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ my: 2, padding: 1 }}
-                  disabled={isSubmitting}
-                >
-                  sign up
-                </Button>
-              </Form>
-            )}
-          </Formik>
-
-          <Link to="/auth/login">
-            {MESSAGE['LOGIN_LINK']}
-          </Link>
-        </Box>
-      </Box>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      sign up
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+            </section>
+          </section>
+        </section>
+        <section className="w-full flex justify-between px-2">
+          <SimpleLink path="/auth/login">
+            already have an account?
+          </SimpleLink>
+          <SimpleLink path="/auth/forget-pass">
+            forget password
+          </SimpleLink>
+        </section>
+      </section>
     </AuthLayout>
   );
 };

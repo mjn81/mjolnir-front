@@ -1,30 +1,30 @@
 import { CreateCategorySchema } from 'constants/index';
 import {
-  deleteWithToken,
-  getWithToken,
-  postWithToken,
-  putWithToken,
+  del,
+  get,
+  post,
+  put,
 } from 'utils';
 
 export const getCategories = async () => {
-  return await getWithToken('/category');
+  return await get('/category');
 };
 
 export const postCategory = async (
   data: CreateCategorySchema,
 ) => {
-  return await postWithToken('/category', data);
+  return await post('/category', data);
 };
 
 export const getCategory = async (id: string) => {
-  return await getWithToken(`/category/${id}`);
+  return await get(`/category/${id}`);
 };
 
 export const putCategory = async (
   id: string,
   data: CreateCategorySchema,
 ) => {
-  return await putWithToken(
+  return await put(
     `/category/${id}`,
     data,
   );
@@ -33,5 +33,5 @@ export const putCategory = async (
 export const deleteCategory = async (
   id: string,
 ) => {
-  return await deleteWithToken(`/category/${id}`);
+  return await del(`/category/${id}`);
 };

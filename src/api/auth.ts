@@ -2,7 +2,7 @@ import {
   LoginForm,
   RegisterForm,
 } from 'constants/index';
-import { post, getWithToken } from 'utils';
+import { post, get } from 'utils';
 
 export const postRegister = async (
   data: RegisterForm,
@@ -17,9 +17,9 @@ export const postLogin = async (
 };
 
 export const getProfile = async () => {
-  return await getWithToken('user/me');
+  return await get('user/me');
 };
 
 export const getDistToken = async () => {
-  return await getWithToken('auth/distToken');
+  return await get('auth/distToken');
 };

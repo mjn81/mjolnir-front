@@ -21,12 +21,11 @@ const LandingRouter = React.lazy(
 );
 
 import 'styles/global.css';
-import { useAppSelector } from 'hooks';
+import { useAuthStore } from 'context';
 import { USER_ROLES } from 'constants/index';
 
 export const RouteManager = () => {
-  const { isAuthenticated, user } =
-    useAppSelector((state) => state.auth);
+  // useAuthStore(state => state.user);
   return (
     <Suspense fallback={<Loading />}>
       <Router>
@@ -39,7 +38,7 @@ export const RouteManager = () => {
             path="auth/*"
             element={<AuthRouter />}
           />
-          {!isAuthenticated ? (
+          {/* {!isAuthenticated ? (
             <Route
               path="app/*"
               element={
@@ -66,7 +65,7 @@ export const RouteManager = () => {
               path="admin/*"
               element={<AdminRouter />}
             />
-          )}
+          )} */}
         </Routes>
       </Router>
     </Suspense>

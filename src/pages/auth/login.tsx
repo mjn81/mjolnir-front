@@ -16,7 +16,6 @@ import {
   LOGIN_VALIDATOR,
 } from 'constants/index';
 import { AuthLayout } from 'layouts';
-import { setAuth, store } from 'context';
 import { postLogin } from 'api';
 
 const LoginPage = () => {
@@ -24,7 +23,7 @@ const LoginPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(postLogin, {
     onSuccess: ({ data }) => {
-      store.dispatch(setAuth(data));
+      console.log(data);
       enqueueSnackbar(data.message, {
         variant: ALERT_TYPES.SUCCESS,
       });
@@ -43,7 +42,6 @@ const LoginPage = () => {
     mutateAsync(values).finally(() => {
       setSubmitting(false);
     });
-    console.log(values);
   };
 
   return (
@@ -112,7 +110,7 @@ const LoginPage = () => {
           </section>
         </section>
         <section className="w-full flex justify-between px-2">
-          <SimpleLink path="/auth/forget-pass">
+          <SimpleLink path="/auth/register">
             dont have an account?
           </SimpleLink>
           <SimpleLink path="/auth/forget-pass">

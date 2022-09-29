@@ -1,2 +1,1 @@
-export * from './store';
-export { setAuth, logout } from './authSlice';
+export * from './authStore';
