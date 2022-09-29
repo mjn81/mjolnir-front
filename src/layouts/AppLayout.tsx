@@ -14,10 +14,14 @@ import {
 import { getProfile } from 'api';
 import { useQuery } from 'react-query';
 import { useSnackbar } from 'notistack';
+import { useAuthStore } from 'context';
 
 export const AppLayout = ({
   children,
 }: PropsWithChildren) => {
+  const logout = useAuthStore(
+    (state) => state.logout,
+  );
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
   const [open, setOpen] = React.useState(false);
@@ -26,6 +30,7 @@ export const AppLayout = ({
     getProfile,
     {
       onError: ({ message }) => {
+        logout();
         enqueueSnackbar(message, {
           variant: ALERT_TYPES.ERROR,
         });
@@ -44,7 +49,25 @@ export const AppLayout = ({
   };
 
   return (
-    <main className="h-screen w-screen"></main>
+    <main>
+      <nav className="drawer drawer-mobile bg-base-200">
+        <input
+          id="side-drawer-menu"
+          type="checkbox"
+          className="drawer-toggle"
+        />
+        <div className="drawer-content flex flex-col items-center justify-center">
+          hello world
+        </div>
+        <div className="drawer-side shadow-xl">
+          <ul className=" menu p-4 overflow-y-auto w-20 bg-base-100 text-base-content">
+            {/* <!-- Sidebar content here --> */}
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
   );
 };
 

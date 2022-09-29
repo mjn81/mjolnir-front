@@ -20,14 +20,21 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { mapUserToState } from 'utils/user';
+import { useAuthStore } from 'context';
 
 const RegisterPage = () => {
+  const login = useAuthStore(
+    (state) => state.login,
+  );
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
   const { mutateAsync } = useMutation(
     postRegister,
     {
       onSuccess: ({ data }) => {
+        const user = mapUserToState(data);
+        login(user, data.token);
         enqueueSnackbar(data.message, {
           variant: ALERT_TYPES.SUCCESS,
         });
@@ -91,12 +98,14 @@ const RegisterPage = () => {
                     <Field
                       as={TextInput}
                       name="email"
+                      type="email"
                       required
                       placeholder="Email Address"
                     />
                     <Field
                       as={TextInput}
                       name="password"
+                      type="password"
                       required
                       placeholder="Password"
                     />

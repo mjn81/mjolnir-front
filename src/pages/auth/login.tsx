@@ -17,7 +17,8 @@ import {
 } from 'constants/index';
 import { AuthLayout } from 'layouts';
 import { postLogin } from 'api';
-import { useAuthStore, IUser } from 'context';
+import { useAuthStore } from 'context';
+import { mapUserToState } from 'utils/user';
 
 const LoginPage = () => {
   const navigation = useNavigate();
@@ -26,19 +27,10 @@ const LoginPage = () => {
   );
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(postLogin, {
-    onSuccess: ({
-      data: { user, token, message },
-    }) => {
-      const muser: IUser = {
-        id: user.id,
-        name: user.fullName,
-        email: user.email,
-        username: user.userName,
-        usage: user.usage,
-        role: user.role,
-      };
-      login(muser, token);
-      enqueueSnackbar(message, {
+    onSuccess: ({ data }) => {
+      const user = mapUserToState(data);
+      login(user, data.token);
+      enqueueSnackbar(data.message, {
         variant: ALERT_TYPES.SUCCESS,
       });
       navigation('/app', { replace: true });
@@ -62,7 +54,7 @@ const LoginPage = () => {
   return (
     <AuthLayout>
       <section className="sm:w-[500px]  hero-content flex-col">
-        <section className="card w-full  shadow-xl bg-base-100">
+        <section className="card w-full shadow-xl bg-base-100">
           <section className="card-body">
             <h1 className="mb-6 capitalize font-semibold text-primary text-center text-5xl">
               login

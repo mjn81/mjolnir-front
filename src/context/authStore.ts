@@ -39,3 +39,5 @@ export const useAuthStore = create<IUserState>()(
     ),
   ),
 );
+
+export const { getState } = useAuthStore;

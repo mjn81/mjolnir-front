@@ -25,7 +25,12 @@ import { useAuthStore } from 'context';
 import { USER_ROLES } from 'constants/index';
 
 export const RouteManager = () => {
-  // useAuthStore(state => state.user);
+  const isAuthenticated = useAuthStore(
+    (state) => state.loggedin,
+  );
+  const user = useAuthStore(
+    (state) => state.user,
+  );
   return (
     <Suspense fallback={<Loading />}>
       <Router>
@@ -38,7 +43,7 @@ export const RouteManager = () => {
             path="auth/*"
             element={<AuthRouter />}
           />
-          {/* {!isAuthenticated ? (
+          {!isAuthenticated ? (
             <Route
               path="app/*"
               element={
@@ -65,7 +70,7 @@ export const RouteManager = () => {
               path="admin/*"
               element={<AdminRouter />}
             />
-          )} */}
+          )}
         </Routes>
       </Router>
     </Suspense>
