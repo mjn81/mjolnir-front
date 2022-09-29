@@ -16,23 +16,29 @@ axios.interceptors.request.use((config) => {
 });
 
 export const get = async (uri: string) => {
-  return axios.get(uri);
+  return axios.get(uri).then((res) => res.data);
 };
 
 export const post = async (
   uri: string,
   data: any,
 ) => {
-  return axios.post(uri, data);
+  return axios
+    .post(uri, data)
+    .then((res) => res.data);
 };
 
 export const put = async (
   uri: string,
   data: any,
 ) => {
-  return axios.put(uri, data);
+  return axios
+    .put(uri, data)
+    .then((res) => res.data);
 };
 
 export const del = async (uri: string) => {
-  return axios.delete(uri);
+  return axios
+    .delete(uri)
+    .then((res) => res.data);
 };

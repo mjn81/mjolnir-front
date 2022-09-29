@@ -32,7 +32,7 @@ const RegisterPage = () => {
   const { mutateAsync } = useMutation(
     postRegister,
     {
-      onSuccess: ({ data }) => {
+      onSuccess: (data) => {
         const user = mapUserToState(data);
         login(user, data.token);
         enqueueSnackbar(data.message, {

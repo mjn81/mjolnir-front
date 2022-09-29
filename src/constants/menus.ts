@@ -1,52 +1,46 @@
 import {
-  Apps,
-  DriveFolderUpload,
-  Category,
-  Dashboard,
-  ManageAccounts,
-  PermDataSetting,
-  Folder,
-  Settings,
-} from '@mui/icons-material';
+  faBarsProgress,
+  faBoxOpen,
+  faEnvelope,
+  faGear,
+  faHouse,
+  faLayerGroup,
+  faTags,
+  faUserGear,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const DRAWER_MENU = [
   {
     name: 'Home',
-    icon: Apps,
+    icon: faHouse,
     path: '/app',
   },
   {
     name: 'Drive',
-    icon: Folder,
+    icon: faBoxOpen,
     path: '/app/drive',
   },
   {
     name: 'Categories',
-    icon: Category,
+    icon: faTags,
     path: '/app/categories',
   },
   {
     name: 'Settings',
-    icon: Settings,
+    icon: faGear,
     path: '/app/settings',
-  }
+  },
 ];
 
 export const ADMIN_DRAWER_MENU = [
   {
-    name: 'Admin',
-    icon: Dashboard,
+    name: 'panel',
+    icon: faBarsProgress,
     path: '/admin',
   },
   {
-    name: 'Categories',
-    icon: PermDataSetting,
-    path: '/admin/categories',
-  },
-  {
     name: 'Users',
-    icon: ManageAccounts,
+    icon: faUserGear,
     path: '/admin/users',
   },
-
 ];

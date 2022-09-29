@@ -22,6 +22,7 @@
     "axios": "^0.27.2",
     "daisyui": "^2.31.0",
     "formik": "^2.2.9",
+    "framer-motion": "^7.5.0",
     "notistack": "^2.0.5",
     "react": "^18.2.0",
     "react-custom-scroll": "^4.4.0",

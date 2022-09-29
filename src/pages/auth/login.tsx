@@ -27,7 +27,7 @@ const LoginPage = () => {
   );
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(postLogin, {
-    onSuccess: ({ data }) => {
+    onSuccess: (data) => {
       const user = mapUserToState(data);
       login(user, data.token);
       enqueueSnackbar(data.message, {

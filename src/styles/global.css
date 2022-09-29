@@ -10,43 +10,10 @@
   padding: 0;
   margin: 0;
 }
-
-a {
-  text-decoration: none;
-  color: cornflowerblue;
+.item-active.btn {
+  @apply bg-primary hover:bg-primary; 
 }
 
-.drawer-link {
-  color: black;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 150px);
-  grid-gap: 25px;
-  grid-auto-rows: 150px;
-}
-
-.drive-full-height {
-  height: calc(100vh - 160px);
-}
-
-.drive-ripple {
-  color: #333;
-}
-
-.loading-page {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: cornflowerblue;
-}
-
-.loader {
-  width: 100px;
-  height: 100px;
+.item-active * {
+  @apply text-primary-content ;
 }
