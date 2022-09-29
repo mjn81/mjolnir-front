@@ -1,22 +1,41 @@
 import create from 'zustand';
+import {
+  persist,
+  devtools,
+} from 'zustand/middleware';
+import { IUser, IUserState } from './models';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  username: string;
-  role: string;
-}
-
-const userInit: User = {
+const userInit: IUser = {
   id: '',
   email: '',
   name: '',
   username: '',
   role: '',
+  usage: {
+    limit: '0',
+    used: '0',
+  },
 };
 
-export const useAuthStore = create((set) => ({
-  user: userInit,
-  setUser: (user: User) => set({ user }),
-}));
+export const useAuthStore = create<IUserState>()(
+  devtools(
+    persist(
+      (set) => ({
+        loggedin: false,
+        token: '',
+        user: userInit,
+        login: (user: IUser, token: string) =>
+          set({ user, token, loggedin: true }),
+        logout: () =>
+          set({
+            user: userInit,
+            token: '',
+            loggedin: false,
+          }),
+      }),
+      {
+        name: 'auth-state',
+      },
+    ),
+  ),
+);

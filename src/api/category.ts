@@ -1,10 +1,5 @@
 import { CreateCategorySchema } from 'constants/index';
-import {
-  del,
-  get,
-  post,
-  put,
-} from 'utils';
+import { del, get, post, put } from 'utils';
 
 export const getCategories = async () => {
   return await get('/category');
@@ -24,10 +19,7 @@ export const putCategory = async (
   id: string,
   data: CreateCategorySchema,
 ) => {
-  return await put(
-    `/category/${id}`,
-    data,
-  );
+  return await put(`/category/${id}`, data);
 };
 
 export const deleteCategory = async (

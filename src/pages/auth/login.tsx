@@ -17,20 +17,35 @@ import {
 } from 'constants/index';
 import { AuthLayout } from 'layouts';
 import { postLogin } from 'api';
+import { useAuthStore, IUser } from 'context';
 
 const LoginPage = () => {
   const navigation = useNavigate();
+  const login = useAuthStore(
+    (state) => state.login,
+  );
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(postLogin, {
-    onSuccess: ({ data }) => {
-      console.log(data);
-      enqueueSnackbar(data.message, {
+    onSuccess: ({
+      data: { user, token, message },
+    }) => {
+      const muser: IUser = {
+        id: user.id,
+        name: user.fullName,
+        email: user.email,
+        username: user.userName,
+        usage: user.usage,
+        role: user.role,
+      };
+      login(muser, token);
+      enqueueSnackbar(message, {
         variant: ALERT_TYPES.SUCCESS,
       });
       navigation('/app', { replace: true });
     },
-    onError: ({ message }) => {
-      enqueueSnackbar(message, {
+    onError: (err) => {
+      console.log(err);
+      enqueueSnackbar('err', {
         variant: ALERT_TYPES.ERROR,
       });
     },
