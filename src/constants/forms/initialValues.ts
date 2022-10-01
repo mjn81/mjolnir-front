@@ -12,6 +12,7 @@ export const REGISTER_INITIAL_VALUES = {
 
 export const CREATE_CATEGORY_INITIAL_VALUES = {
   name: '',
+  color: '',
 };
 
 export const UPLOAD_FILE_INITIAL_VALUES = {

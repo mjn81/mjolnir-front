@@ -10,12 +10,7 @@ const Drive = React.lazy(() => import('./drive'));
 const Categories = React.lazy(
   () => import('./category'),
 );
-const CreateCategory = React.lazy(
-  () => import('./category/create'),
-);
-const EditCategory = React.lazy(
-  () => import('./category/edit'),
-);
+
 const Upload = React.lazy(
   () => import('./drive/upload'),
 );
@@ -29,14 +24,6 @@ const AppRouter = () => {
           <Route
             path="categories"
             element={<Categories />}
-          />
-          <Route
-            path="categories/create"
-            element={<CreateCategory />}
-          />
-          <Route
-            path="categories/edit/:id"
-            element={<EditCategory />}
           />
           <Route
             path="drive"

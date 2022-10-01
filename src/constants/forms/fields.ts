@@ -19,6 +19,12 @@ export const CREATE_CATEGORY_FIELDS: FieldsType =
       type: 'text',
       required: true,
     },
+    {
+      fieldType: FormFieldTypes.color,
+      name: 'color',
+      placeholder: 'Color',
+      required: true,
+    },
   ];
 
 export const CREATE_FOLDER_FIELDS: FieldsType = [

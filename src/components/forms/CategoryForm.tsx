@@ -19,13 +19,20 @@ import {
   putCategory,
 } from 'api';
 
-export const CreateCategoryForm = () => {
+type FormProps = {
+  onClose?: () => void;
+};
+
+export const CreateCategoryForm = ({
+  onClose,
+}: FormProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(
     'postCreateCategory',
     postCategory,
     {
       onSuccess: ({ message }) => {
+        onClose && onClose();
         enqueueSnackbar(message, {
           variant: ALERT_TYPES.SUCCESS,
         });
@@ -65,10 +72,11 @@ export const CreateCategoryForm = () => {
 
 type EditCategoryProps = {
   id: string;
-};
+} & FormProps;
 
 export const EditCategoryForm = ({
   id,
+  onClose,
 }: EditCategoryProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useQuery(
@@ -83,12 +91,17 @@ export const EditCategoryForm = ({
       },
     },
   );
+  const catData = {
+    name: data?.category.name,
+    color: data?.category.color,
+  };
   const { mutateAsync } = useMutation(
     'postUpdateCategory',
     (data: CreateCategorySchema) =>
       putCategory(id, data),
     {
       onSuccess: ({ message }) => {
+        onClose && onClose();
         enqueueSnackbar(message, {
           variant: ALERT_TYPES.SUCCESS,
         });
@@ -112,7 +125,7 @@ export const EditCategoryForm = ({
     <Generator
       initialValues={
         data
-          ? data.category
+          ? catData
           : CREATE_CATEGORY_INITIAL_VALUES
       }
       fields={CREATE_CATEGORY_FIELDS}

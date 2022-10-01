@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,3 +21,13 @@
 .table td {
   @apply py-3 ;
 }
+
+.code-font-light {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 300;
+}
+.code-font {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 400;
+}
+

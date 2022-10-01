@@ -19,12 +19,10 @@ import {
 } from 'react-query';
 import { Link } from 'react-router-dom';
 import {
-  ConfirmModal,
   ContextMenu,
   ContextMenuWrapper,
   DriveFileItem,
   DriveFolderItem,
-  FormModal,
 } from 'components';
 import {
   ALERT_TYPES,
@@ -206,7 +204,7 @@ const Drive = () => {
         />
       </ContextMenuWrapper>
 
-      <FormModal
+      {/* <FormModal
         id={CREATE_FOLDER_DRIVE_MODAL_ID}
         title="new folder"
         context="create new folder here"
@@ -227,16 +225,16 @@ const Drive = () => {
             });
           },
         }}
-      />
+      /> */}
 
-      <ConfirmModal
+      {/* <ConfirmModal
         open={isOpenDeleteFolder}
         handleClose={closeDeleteFolderModal}
         title="delete folder"
         context="are you sure you want to delete this folder?"
         actions={DeleteModalActions}
         id={DELETE_FOLDER_DRIVE_MODAL_ID}
-      />
+      /> */}
     </div>
   );
 };

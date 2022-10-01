@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { ALERT_TYPES } from 'constants/index';
 import { useSnackbar } from 'notistack';
-import React from 'react';
 import { hexToRgb } from 'utils';
+import { useFormikContext } from 'formik';
+import { SliderPicker } from 'react-color';
 
 export const ColorBox = ({
   color,
@@ -57,5 +60,36 @@ export const ColorBox = ({
         )}
       </div>
     </section>
+  );
+};
+
+type ColorPickerProps = {
+  name: string;
+  placeholder?: string;
+};
+
+export const ColorPickerField = ({
+  name,
+  placeholder,
+}: ColorPickerProps) => {
+  const { setFieldValue, values } =
+    useFormikContext();
+
+  return (
+    <div className="border border-1 p-3 bg-base-200 rounded-lg flex items-center justify-center space-x-3">
+      <h4
+        style={{ color: values && values[name] }}
+        className="font-semibold"
+      >
+        {placeholder} :
+      </h4>
+      <SliderPicker
+        className="flex-1"
+        color={values && values[name]}
+        onChange={(color) => {
+          setFieldValue(name, color.hex);
+        }}
+      />
+    </div>
   );
 };

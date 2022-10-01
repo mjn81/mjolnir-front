@@ -11,6 +11,7 @@ import { AnyObjectSchema } from 'yup';
 import { FieldsType } from 'constants/index';
 import {
   Button,
+  ColorPickerField,
   FileDropField,
   SelectField,
   TextInput,
@@ -125,5 +126,12 @@ const FieldGenerator = ({
       );
     case FormFieldTypes.file:
       return <FileDropField name={name} />;
+    case FormFieldTypes.color:
+      return (
+        <ColorPickerField
+          name={name}
+          {...others}
+        />
+      );
   }
 };

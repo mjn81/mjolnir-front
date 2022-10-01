@@ -37,6 +37,7 @@ export type RegisterForm = Yup.InferType<
 export const CREATE_CATEGORY_VALIDATOR =
   Yup.object({
     name: Yup.string().required(),
+    color: Yup.string().required(),
   }).required();
 
 export type CreateCategorySchema = Yup.InferType<

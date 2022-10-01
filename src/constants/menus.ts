@@ -19,7 +19,7 @@ export const DRAWER_MENU = [
     path: '/app/drive',
   },
   {
-    name: 'Categories',
+    name: 'Tags',
     icon: faTags,
     path: '/app/categories',
   },

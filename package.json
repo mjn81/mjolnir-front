@@ -25,6 +25,7 @@
     "framer-motion": "^7.5.0",
     "notistack": "^2.0.5",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-custom-scroll": "^4.4.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.2",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@types/node": "^18.7.8",
     "@types/react": "^18.0.17",
+    "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.6",
     "@types/react-portal": "^4.0.4",
     "@typescript-eslint/eslint-plugin": "^5.33.1",

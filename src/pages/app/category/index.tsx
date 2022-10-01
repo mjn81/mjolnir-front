@@ -6,7 +6,10 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGears,
+  faSquarePlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import {
   deleteCategory,
@@ -17,7 +20,9 @@ import {
   CreateCategoryForm,
   EditCategoryForm,
   Modal,
+  SearchInput,
   TableGenerator,
+  TextInput,
 } from 'components';
 import {
   ALERT_TYPES,
@@ -57,24 +62,43 @@ const Categories = () => {
       },
     },
   );
-
+  const handleCloseModal = () => {
+    closeModal();
+    refetch();
+  };
+  const handleEditCloseModal = () => {
+    editClose();
+    refetch();
+  };
   return (
     <section>
-      <section className="flex mb-2 justify-between items-center">
+      <header className="space-y-3 mb-4">
         <h3 className="text-2xl font-medium">
           Categories
         </h3>
-        <Button
-          className="text-base capitalize"
-          onClick={() => openModal()}
-        >
-          <FontAwesomeIcon
-            icon={faSquarePlus}
-            className="mr-2"
-          />
-          <p>create</p>
-        </Button>
-      </section>
+        <section className="flex items-center justify-between">
+          <SearchInput />
+          <div className="space-x-2">
+            <Button className="text-base text-neutral capitalize bg-base-200 border-neutral hover:bg-neutral-content hover:border-neutral-content">
+              <FontAwesomeIcon
+                icon={faGears}
+                className="mr-2"
+              />
+              <p>action</p>
+            </Button>
+            <Button
+              className="text-base capitalize"
+              onClick={() => openModal()}
+            >
+              <FontAwesomeIcon
+                icon={faSquarePlus}
+                className="mr-2"
+              />
+              <p>create</p>
+            </Button>
+          </div>
+        </section>
+      </header>
       {!isLoading && (
         <TableGenerator
           counter
@@ -89,7 +113,10 @@ const Categories = () => {
           }}
         />
       )}
-      <Modal isOpen={isOpen} onClose={closeModal}>
+      <Modal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+      >
         <div className="w-full space-y-3">
           <h2 className="capitalize font-semibold text-xl">
             create category
@@ -109,7 +136,10 @@ const Categories = () => {
             edit category
           </h2>
           {!!editId && (
-            <EditCategoryForm id={editId} />
+            <EditCategoryForm
+              id={editId}
+              onClose={handleEditCloseModal}
+            />
           )}
         </div>
       </Modal>

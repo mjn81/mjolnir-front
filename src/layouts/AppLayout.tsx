@@ -63,8 +63,12 @@ export const AppLayout = () => {
   };
 
   const nav_variants = {
-    open: { width: '150px' },
-    closed: { width: '80px' },
+    open: {
+      width: '150px',
+    },
+    closed: {
+      width: '80px',
+    },
   };
   const text_variants = {
     open: {
@@ -82,12 +86,10 @@ export const AppLayout = () => {
       width: '0',
       display: 'none',
       transition: {
-        display: {
-          delay: 0.05,
-        },
         opacity: {
           duration: 0.05,
         },
+        type: 'tween',
       },
     },
   };
