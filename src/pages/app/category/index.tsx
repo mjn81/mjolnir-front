@@ -19,6 +19,7 @@ import {
 import {
   Button,
   CreateCategoryForm,
+  DropdownButton,
   EditCategoryForm,
   Modal,
   SearchInput,
@@ -30,6 +31,7 @@ import {
   CATEGORY_COLUMNS,
 } from 'constants/index';
 import useModal from 'hooks/useModal';
+import { ACTION_DROPDOWN } from 'constants/dropdown';
 
 const Categories = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -82,13 +84,12 @@ const Categories = () => {
         <section className="flex items-center justify-between">
           <SearchInput />
           <div className="space-x-2">
-            <Button className="text-base text-neutral capitalize bg-base-200 border-neutral hover:bg-neutral-content hover:border-neutral-content">
-              <FontAwesomeIcon
-                icon={faGears}
-                className="mr-2"
-              />
+            <DropdownButton
+              options={ACTION_DROPDOWN}
+            >
+              <FontAwesomeIcon icon={faGears} />
               <p>action</p>
-            </Button>
+            </DropdownButton>
             <Button
               className="text-base capitalize"
               onClick={() => openModal()}

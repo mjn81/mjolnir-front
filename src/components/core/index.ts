@@ -7,3 +7,4 @@ export * from './File';
 export * from './Button';
 export * from './Input';
 export * from './Color';
+export * from './Dropdown';

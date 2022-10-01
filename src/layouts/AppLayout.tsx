@@ -20,6 +20,51 @@ import { useSnackbar } from 'notistack';
 import { useAuthStore } from 'context';
 import { useCurrentPath } from 'hooks';
 
+const nav_variants = {
+  open: {
+    width: '150px',
+  },
+  closed: {
+    width: '80px',
+  },
+};
+const text_variants = {
+  open: {
+    opacity: 1,
+    display: 'block',
+    width: 'fit-content',
+    transition: {
+      opacity: {
+        delay: 0.1,
+      },
+    },
+  },
+  closed: {
+    opacity: 0,
+    width: '0',
+    display: 'none',
+    transition: {
+      opacity: {
+        duration: 0.05,
+      },
+      type: 'tween',
+    },
+  },
+};
+const button_variants = {
+  open: {
+    rotate: -180,
+  },
+  close: {
+    rotate: 0,
+  },
+};
+const button_wrapper_variants = {
+  open: {
+    width: '100%',
+  },
+};
+
 export const AppLayout = () => {
   const logout = useAuthStore(
     (state) => state.logout,
@@ -62,50 +107,6 @@ export const AppLayout = () => {
     setOpen((state) => !state);
   };
 
-  const nav_variants = {
-    open: {
-      width: '150px',
-    },
-    closed: {
-      width: '80px',
-    },
-  };
-  const text_variants = {
-    open: {
-      opacity: 1,
-      display: 'block',
-      width: 'fit-content',
-      transition: {
-        opacity: {
-          delay: 0.1,
-        },
-      },
-    },
-    closed: {
-      opacity: 0,
-      width: '0',
-      display: 'none',
-      transition: {
-        opacity: {
-          duration: 0.05,
-        },
-        type: 'tween',
-      },
-    },
-  };
-  const button_variants = {
-    open: {
-      rotate: -180,
-    },
-    close: {
-      rotate: 0,
-    },
-  };
-  const button_wrapper_variants = {
-    open: {
-      width: '100%',
-    },
-  };
   return (
     <main className="bg-base-100 flex">
       <motion.nav

@@ -52,6 +52,7 @@ export const Modal = ({
       <motion.section
         variants={bg_variants}
         initial="none"
+        exit="none"
         animate={isOpen ? 'open' : 'close'}
         onClick={handleClose}
         className="absolute h-screen w-screen top-0 left-0 justify-center items-center bg-neutral-focus bg-opacity-60 z-20"
