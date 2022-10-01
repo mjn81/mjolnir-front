@@ -35,4 +35,17 @@ export const CATEGORY_COLUMNS: ColumnsType = [
     label: 'Tokens',
     accessor: (row) => row['_count'].distToken,
   },
+  {
+    name: 'updatedAt',
+    label: 'last modified',
+    accessor: (row) =>
+      new Date(row.updatedAt).toLocaleString(
+        'en-Us',
+        {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        },
+      ),
+  },
 ];

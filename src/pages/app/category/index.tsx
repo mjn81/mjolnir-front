@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGears,
   faSquarePlus,
+  faTags,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -62,6 +63,7 @@ const Categories = () => {
       },
     },
   );
+
   const handleCloseModal = () => {
     closeModal();
     refetch();
@@ -73,8 +75,9 @@ const Categories = () => {
   return (
     <section>
       <header className="space-y-3 mb-4">
-        <h3 className="text-2xl font-medium">
-          Categories
+        <h3 className="text-2xl font-medium space-x-2">
+          <FontAwesomeIcon icon={faTags} />
+          <span>Tags</span>
         </h3>
         <section className="flex items-center justify-between">
           <SearchInput />
@@ -119,7 +122,7 @@ const Categories = () => {
       >
         <div className="w-full space-y-3">
           <h2 className="capitalize font-semibold text-xl">
-            create category
+            create tag
           </h2>
           <CreateCategoryForm />
         </div>
@@ -133,7 +136,7 @@ const Categories = () => {
       >
         <div className="w-full space-y-3">
           <h2 className="capitalize font-semibold text-xl">
-            edit category
+            edit tag
           </h2>
           {!!editId && (
             <EditCategoryForm
