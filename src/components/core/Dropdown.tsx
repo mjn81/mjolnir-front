@@ -83,7 +83,7 @@ export const DropdownButton = ({
         }}
         variants={wrapper_variants}
         animate={isOpen ? 'open' : 'closed'}
-        className="overflow-hidden border absolute  z-40 top-full mt-2 -left-2 dropdown-content menu p-2 shadow bg-primary-content rounded-lg w-52"
+        className="overflow-hidden border absolute  z-40 top-full mt-2 -left-2 dropdown-content menu p-2 shadow bg-base-100 rounded-lg w-52"
       >
         {options.map((option, index) => (
           <motion.div
