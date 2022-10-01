@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Typography } from '@mui/material';
 import {
   ALERT_TYPES,
   CreateCategorySchema,
@@ -10,8 +9,15 @@ import {
 } from 'constants/index';
 import { Generator } from './Generator';
 import { useSnackbar } from 'notistack';
-import { useMutation } from 'react-query';
-import { postCategory } from 'api';
+import {
+  useMutation,
+  useQuery,
+} from 'react-query';
+import {
+  getCategory,
+  postCategory,
+  putCategory,
+} from 'api';
 
 export const CreateCategoryForm = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -51,37 +57,68 @@ export const CreateCategoryForm = () => {
       submit={handleSubmit}
       validator={CREATE_CATEGORY_VALIDATOR}
       submitBtn={
-        <Typography variant="h6" component="p">
-          Create
-        </Typography>
+        <p className="text-lg">Create</p>
       }
     />
   );
 };
 
 type EditCategoryProps = {
-  submit: (
-    values: CreateCategorySchema,
-    options: any,
-  ) => void;
-  data: CreateCategorySchema;
+  id: string;
 };
 
 export const EditCategoryForm = ({
-  submit,
-  data,
+  id,
 }: EditCategoryProps) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const { data } = useQuery(
+    ['getCategoryDetail', id],
+    async () => getCategory(id),
+    {
+      enabled: !!id,
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
+    },
+  );
+  const { mutateAsync } = useMutation(
+    'postUpdateCategory',
+    (data: CreateCategorySchema) =>
+      putCategory(id, data),
+    {
+      onSuccess: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.SUCCESS,
+        });
+      },
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
+    },
+  );
+  const handleSubmit = (
+    value: CreateCategorySchema,
+    { setSubmitting },
+  ) => {
+    mutateAsync(value).then(() => {
+      setSubmitting(false);
+    });
+  };
   return (
     <Generator
-      initialValues={data}
-      fields={CREATE_CATEGORY_FIELDS}
-      submit={submit}
-      validator={CREATE_CATEGORY_VALIDATOR}
-      submitBtn={
-        <Typography variant="h6" component="p">
-          Edit
-        </Typography>
+      initialValues={
+        data
+          ? data.category
+          : CREATE_CATEGORY_INITIAL_VALUES
       }
+      fields={CREATE_CATEGORY_FIELDS}
+      submit={handleSubmit}
+      validator={CREATE_CATEGORY_VALIDATOR}
+      submitBtn={<p className="text-lg">Edit</p>}
     />
   );
 };

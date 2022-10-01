@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   useMutation,
   useQuery,
@@ -15,6 +15,7 @@ import {
 import {
   Button,
   CreateCategoryForm,
+  EditCategoryForm,
   Modal,
   TableGenerator,
 } from 'components';
@@ -26,9 +27,15 @@ import useModal from 'hooks/useModal';
 
 const Categories = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const navigation = useNavigate();
+  const [editId, setEditId] =
+    useState<string>('');
   const { isOpen, closeModal, openModal } =
     useModal();
+  const {
+    isOpen: editIsOpen,
+    closeModal: editClose,
+    openModal: editOpen,
+  } = useModal();
   const { data, isLoading, refetch } = useQuery(
     'getCategories',
     getCategories,
@@ -74,7 +81,8 @@ const Categories = () => {
           columns={CATEGORY_COLUMNS}
           data={data.categories}
           onEdit={(id) => {
-            navigation(`edit/${id}`);
+            setEditId(id);
+            editOpen();
           }}
           onDelete={(id) => {
             mutateAsync(id).then(() => refetch());
@@ -82,11 +90,27 @@ const Categories = () => {
         />
       )}
       <Modal isOpen={isOpen} onClose={closeModal}>
-        <div className="w-full space-y-2">
+        <div className="w-full space-y-3">
           <h2 className="capitalize font-semibold text-xl">
             create category
           </h2>
           <CreateCategoryForm />
+        </div>
+      </Modal>
+      <Modal
+        isOpen={editIsOpen}
+        onClose={() => {
+          editClose();
+          setEditId('');
+        }}
+      >
+        <div className="w-full space-y-3">
+          <h2 className="capitalize font-semibold text-xl">
+            edit category
+          </h2>
+          {!!editId && (
+            <EditCategoryForm id={editId} />
+          )}
         </div>
       </Modal>
     </section>

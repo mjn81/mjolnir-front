@@ -18,7 +18,6 @@ export const Modal = ({
 }: ModalProps) => {
   const handleClose = (e: MouseEvent) => {
     e.stopPropagation();
-    console.log(isOpen);
     onClose();
   };
 
@@ -33,9 +32,13 @@ export const Modal = ({
       display: 'none',
       transition: {
         display: {
-          delay: 0.5,
+          delay: 0.1,
         },
       },
+    },
+    none: {
+      opacity: 0,
+      display: 'none',
     },
   };
 
@@ -48,6 +51,7 @@ export const Modal = ({
     >
       <motion.section
         variants={bg_variants}
+        initial="none"
         animate={isOpen ? 'open' : 'close'}
         onClick={handleClose}
         className="absolute h-screen w-screen top-0 left-0 justify-center items-center bg-neutral-focus bg-opacity-60 z-20"

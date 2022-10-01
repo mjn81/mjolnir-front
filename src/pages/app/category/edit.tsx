@@ -56,10 +56,7 @@ const EditCategory = () => {
   return (
     <Box>
       {data && (
-        <EditCategoryForm
-          submit={handleSubmit}
-          data={{ name: data.category.name }}
-        />
+       
       )}
     </Box>
   );
