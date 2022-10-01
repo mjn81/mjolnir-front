@@ -1,10 +1,21 @@
-import { ButtonLink } from 'components';
 import React from 'react';
+import { ButtonLink } from 'components';
+import { useAuthStore } from 'context';
 
 const LandingPage = () => {
+  const logged = useAuthStore(
+    (state) => state.loggedin,
+  );
   return (
-    <main className="bg-neutral-focus  text-center w-screen h-screen">
-      <div className="space-y-8 w-full h-full flex flex-col justify-center items-center">
+    <main className="bg-neutral-focus text-center flex flex-col w-screen h-screen">
+      <header className="text-right p-3">
+        <ButtonLink
+          path={logged ? '/app' : '/auth/login'}
+        >
+          <span className="px-4">login</span>
+        </ButtonLink>
+      </header>
+      <div className="space-y-8 w-full flex-1 flex flex-col justify-center items-center">
         <h1 className="text-5xl text-white">
           New
           <span className="text-primary mx-3">
@@ -13,14 +24,6 @@ const LandingPage = () => {
           Server plus distribution api for free
           for 3 months
         </h1>
-        <div className="space-x-5 ">
-          <ButtonLink path="/auth/login">
-            login
-          </ButtonLink>
-          <ButtonLink path="/auth/register">
-            signup
-          </ButtonLink>
-        </div>
       </div>
     </main>
   );

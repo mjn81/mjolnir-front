@@ -106,6 +106,7 @@ const LoginPage = () => {
                     )}
                     <Button
                       type="submit"
+                      full
                       disabled={isSubmitting}
                     >
                       login

@@ -1,5 +1,8 @@
 import React from 'react';
-import { TableGenerator } from 'components';
+import {
+  ButtonLink,
+  TableGenerator,
+} from 'components';
 import {
   ALERT_TYPES,
   CATEGORY_COLUMNS,
@@ -13,15 +16,12 @@ import {
   getCategories,
 } from 'api';
 import {
-  Box,
-  Button,
-  Typography,
-} from '@mui/material';
-import {
   Link,
   useNavigate,
 } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 const Categories = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -47,31 +47,27 @@ const Categories = () => {
       },
     },
   );
+  console.log(data);
   return (
-    <div>
-      <Box
-        display="flex"
-        marginBottom={2}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Typography variant="h6" component="p">
+    <section className="">
+      <section className="flex mb-2 justify-between items-center">
+        <h3 className="text-2xl font-medium">
           Categories
-        </Typography>
-        <Link to="create">
-          <Button variant="contained">
-            <Typography
-              variant="subtitle1"
-              textTransform="capitalize"
-            >
-              create category
-            </Typography>
-          </Button>
-        </Link>
-      </Box>
+        </h3>
+        <ButtonLink
+          path="create"
+          className="text-base "
+        >
+          <FontAwesomeIcon
+            icon={faSquarePlus}
+            className="mr-2"
+          />
+          <p>create</p>
+        </ButtonLink>
+      </section>
       {!isLoading && (
         <TableGenerator
+          counter
           columns={CATEGORY_COLUMNS}
           data={data.categories}
           onEdit={(id) => {
@@ -82,7 +78,7 @@ const Categories = () => {
           }}
         />
       )}
-    </div>
+    </section>
   );
 };
 

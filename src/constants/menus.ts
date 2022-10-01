@@ -1,10 +1,8 @@
 import {
   faBarsProgress,
   faBoxOpen,
-  faEnvelope,
   faGear,
   faHouse,
-  faLayerGroup,
   faTags,
   faUserGear,
 } from '@fortawesome/free-solid-svg-icons';

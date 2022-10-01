@@ -1,81 +1,72 @@
 import React from 'react';
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Button } from './Button';
 
 type Props = {
   data: any[];
   columns: any[];
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+  counter?: boolean;
 };
 
 export const TableGenerator = ({
   columns,
   data,
+  counter,
   onEdit,
   onDelete,
 }: Props) => {
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead
-          sx={{
-            backgroundColor: '#f5f5f5',
-          }}
-        >
-          <TableRow>
+    <div className="border rounded-lg overflow-x-auto">
+      <table
+        className="table w-full"
+        aria-label="simple table"
+      >
+        <thead>
+          <tr>
+            {counter && <th>#</th>}
             {columns.map((column) => (
-              <TableCell key={column.name}>
+              <th key={column.name}>
                 {column.label}
-              </TableCell>
+              </th>
             ))}
             {(onEdit || onDelete) && (
-              <TableCell align="center">
+              <th className="text-center">
                 Actions
-              </TableCell>
+              </th>
             )}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id}>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <tr key={row.id}>
+              {counter && <td>{index + 1}</td>}
               {columns.map((column) => (
-                <TableCell
+                <td
                   key={`td_${column.name}_${row.id}`}
                 >
                   {column.accessor
                     ? column.accessor(row)
                     : row[column.name]}
-                </TableCell>
+                </td>
               ))}
               {(onEdit || onDelete) && (
-                <TableCell align="center">
+                <td className="space-x-2 text-center">
                   {onEdit && (
                     <Button
-                      variant="contained"
-                      color="warning"
+                      color="btn-warning"
+                      className="btn-sm text-primary-content shadow shadow-warning hover:shadow-md hover:shadow-warning"
                       onClick={() =>
                         onEdit(row.id)
                       }
-                      sx={{
-                        marginRight: 2,
-                      }}
                     >
                       Edit
                     </Button>
                   )}
                   {onDelete && (
                     <Button
-                      variant="contained"
-                      color="error"
+                      color="btn-error"
+                      className="btn-sm text-primary-content shadow shadow-error hover:shadow-md hover:shadow-error"
                       onClick={() =>
                         onDelete(row.id)
                       }
@@ -83,12 +74,12 @@ export const TableGenerator = ({
                       Delete
                     </Button>
                   )}
-                </TableCell>
+                </td>
               )}
-            </TableRow>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </tbody>
+      </table>
+    </div>
   );
 };

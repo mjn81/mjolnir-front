@@ -1,16 +1,6 @@
 import React from 'react';
 
-import {
-  Alert,
-  Box,
-  Button,
-  Select,
-  TextField,
-} from '@mui/material';
-import {
-  ALERT_TYPES,
-  FormFieldTypes,
-} from 'constants/index';
+import { FormFieldTypes } from 'constants/index';
 import {
   ErrorMessage,
   Field,
@@ -20,9 +10,11 @@ import {
 import { AnyObjectSchema } from 'yup';
 import { FieldsType } from 'constants/index';
 import {
+  Button,
   FileDropField,
   SelectField,
-} from 'components/core';
+  TextInput,
+} from 'components';
 
 export type GeneratorProps = {
   submit: (data: any, helpers: any) => any;
@@ -42,57 +34,61 @@ export const Generator = ({
   submit,
 }: GeneratorProps) => {
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validator}
-      onSubmit={submit}
-      enableReinitialize={true}
-    >
-      {({
-        isSubmitting,
-        errors,
-        setFieldValue,
-        touched,
-      }) => (
-        <Form>
-          <Box sx={{ marginBottom: 2 }}>
-            {Object.keys(errors).length > 0 &&
-              Object.keys(errors).map(
-                (key, index) =>
-                  touched[key] && (
-                    <Alert
-                      sx={{
-                        mt: 1,
-                      }}
-                      severity={ALERT_TYPES.ERROR}
-                      key={`er_log_${index}`}
-                    >
-                      {errors[key] as string}
-                    </Alert>
-                  ),
-              )}
-          </Box>
-          {fields.map(
-            ({ fieldType, ...other }, index) => (
-              <FieldGenerator
-                key={index}
-                fieldType={fieldType}
-                setField={setFieldValue}
-                {...other}
-              />
-            ),
-          )}
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={isSubmitting}
-          >
-            {submitBtn}
-          </Button>
-        </Form>
-      )}
-    </Formik>
+    <section className="form-control">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validator}
+        onSubmit={submit}
+        enableReinitialize={true}
+      >
+        {({
+          isSubmitting,
+          errors,
+          setFieldValue,
+          touched,
+        }) => (
+          <Form className="space-y-4">
+            {fields.map(
+              (
+                { fieldType, ...other },
+                index,
+              ) => (
+                <FieldGenerator
+                  key={index}
+                  fieldType={fieldType}
+                  setField={setFieldValue}
+                  {...other}
+                />
+              ),
+            )}
+            {Object.keys(errors).length > 0 && (
+              <ul className="list-disc mx-5">
+                {Object.keys(errors).map(
+                  (key, index) =>
+                    touched[key] && (
+                      <li
+                        className="text-error"
+                        key={`er_log_${index}`}
+                      >
+                        <ErrorMessage
+                          name={key}
+                        />
+                      </li>
+                    ),
+                )}
+              </ul>
+            )}
+            <Button
+              type="submit"
+              full
+              disabled={isSubmitting}
+            >
+              {submitBtn}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </section>
   );
 };
 
@@ -117,13 +113,8 @@ const FieldGenerator = ({
     case FormFieldTypes.input:
       return (
         <Field
-          as={TextField}
-          variant="outlined"
-          fullWidth
+          as={TextInput}
           name={name}
-          sx={{
-            marginBottom: 2,
-          }}
           {...others}
         />
       );

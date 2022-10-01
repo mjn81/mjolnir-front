@@ -39,32 +39,16 @@ const CreateCategory = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Box
-        width={{
-          xs: '100%',
-          sm: '80%',
-          md: '70%',
-          lg: '60%',
-          xl: '50%',
-        }}
-      >
-        <Typography
-          textTransform="capitalize"
-          variant="h6"
-          component="p"
-        >
+    <section className="flex justify-center items-center">
+      <div className="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 space-y-2">
+        <h2 className="capitalize font-semibold text-xl">
           create category
-        </Typography>
+        </h2>
         <CreateCategoryForm
           submit={handleSubmit}
         />
-      </Box>
-    </Box>
+      </div>
+    </section>
   );
 };
 

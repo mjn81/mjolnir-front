@@ -5,7 +5,7 @@ export type FieldsType = {
   fieldType: FormFieldTypes;
   name: string;
   type?: string;
-  label?: string;
+  placeholder?: string;
   required?: boolean;
   [inp: string]: any;
 }[];
@@ -15,7 +15,7 @@ export const CREATE_CATEGORY_FIELDS: FieldsType =
     {
       fieldType: FormFieldTypes.input,
       name: 'name',
-      label: 'Name',
+      placeholder: 'Name',
       type: 'text',
       required: true,
     },
@@ -25,7 +25,7 @@ export const CREATE_FOLDER_FIELDS: FieldsType = [
   {
     fieldType: FormFieldTypes.input,
     name: 'name',
-    label: 'Name',
+    placeholder: 'Name',
     type: 'text',
     required: true,
   },
@@ -35,21 +35,21 @@ export const UPLOAD_FILE_FIELDS: FieldsType = [
   {
     fieldType: FormFieldTypes.input,
     name: 'name',
-    label: 'Name',
+    placeholder: 'Name',
     type: 'text',
     required: true,
   },
   {
     fieldType: FormFieldTypes.file,
     name: 'file',
-    label: 'File',
+    placeholder: 'File',
     type: 'file',
     required: true,
   },
   {
     fieldType: FormFieldTypes.select,
     name: 'category',
-    label: 'Category',
+    placeholder: 'Category',
     getOptions: async () => {
       return getCategories().then(
         (res) => res.categories,

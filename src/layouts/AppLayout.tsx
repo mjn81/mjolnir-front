@@ -66,18 +66,30 @@ export const AppLayout = () => {
     open: { width: '150px' },
     closed: { width: '80px' },
   };
-
   const text_variants = {
     open: {
       opacity: 1,
       display: 'block',
+      width: 'fit-content',
       transition: {
         opacity: {
           delay: 0.1,
         },
       },
     },
-    closed: { opacity: 0, display: 'none' },
+    closed: {
+      opacity: 0,
+      width: '0',
+      display: 'none',
+      transition: {
+        display: {
+          delay: 0.05,
+        },
+        opacity: {
+          duration: 0.05,
+        },
+      },
+    },
   };
   const button_variants = {
     open: {
@@ -131,7 +143,7 @@ export const AppLayout = () => {
                         (currentPath === item.path
                           ? 'item-active '
                           : '') +
-                        'w-full whitespace-nowrap btn bg-transparent border-none hover:bg-base-200 p-2 space-x-2'
+                        'outline-none w-full whitespace-nowrap btn bg-transparent border-none hover:bg-base-200 p-2 space-x-2'
                       }
                     >
                       <FontAwesomeIcon
@@ -207,7 +219,7 @@ export const AppLayout = () => {
           </motion.div>
         </section>
       </motion.nav>
-      <section>
+      <section className="flex-1 p-6 ">
         <Outlet />
       </section>
     </main>

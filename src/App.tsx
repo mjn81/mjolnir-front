@@ -1,16 +1,12 @@
 import React from 'react';
 import { RouteManager } from 'pages';
 import {
-  createTheme,
-  ThemeProvider,
-} from '@mui/material';
-import {
   QueryClientProvider,
   QueryClient,
+  QueryCache,
 } from 'react-query';
 import { SnackbarProvider } from 'notistack';
 
-const theme = createTheme();
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -18,9 +14,7 @@ const App = () => {
   return (
     <SnackbarProvider maxSnack={3}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <RouteManager />
-        </ThemeProvider>
+        <RouteManager />
       </QueryClientProvider>
     </SnackbarProvider>
   );

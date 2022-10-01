@@ -6,19 +6,30 @@ import { Link } from 'react-router-dom';
 
 type ButtonProps = {
   onClick?: (e: MouseEvent) => void;
-  disabled: boolean;
+  disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  color?: string;
+  full?: boolean;
+  className?: string;
 } & PropsWithChildren;
 
 export const Button = ({
   onClick,
   type,
   disabled,
+  color,
+  full,
+  className,
   children,
 }: ButtonProps) => {
   return (
     <button
-      className="btn btn-primary w-full"
+      className={
+        'btn ' +
+        (color ? color + ' ' : 'btn-primary ') +
+        (full ? ' w-full' : '') +
+        (className ? ' ' + className : '')
+      }
       onClick={(e: MouseEvent) => {
         onClick && onClick(e);
       }}
@@ -32,15 +43,20 @@ export const Button = ({
 
 type LinkProps = {
   path: string;
+  className?: string;
 } & PropsWithChildren;
 
 export const ButtonLink = ({
   path,
+  className,
   children,
 }: LinkProps) => {
   return (
     <Link
-      className="btn btn-primary px-10 text-lg"
+      className={
+        (className ? className + ' ' : '') +
+        'btn btn-primary capitalize transition-colors'
+      }
       to={path}
     >
       {children}

@@ -127,6 +127,7 @@ const RegisterPage = () => {
                     )}
                     <Button
                       type="submit"
+                      full
                       disabled={isSubmitting}
                     >
                       sign up

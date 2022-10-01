@@ -11,9 +11,13 @@
   margin: 0;
 }
 .item-active.btn {
-  @apply bg-primary hover:bg-primary; 
+  @apply bg-primary hover:bg-primary border-none outline-none; 
 }
 
 .item-active * {
   @apply text-primary-content ;
+}
+
+.table td {
+  @apply py-3 ;
 }
