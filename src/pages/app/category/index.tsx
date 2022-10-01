@@ -1,31 +1,34 @@
 import React from 'react';
 import {
-  ButtonLink,
+  useMutation,
+  useQuery,
+} from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+
+import {
+  deleteCategory,
+  getCategories,
+} from 'api';
+import {
+  Button,
+  CreateCategoryForm,
+  Modal,
   TableGenerator,
 } from 'components';
 import {
   ALERT_TYPES,
   CATEGORY_COLUMNS,
 } from 'constants/index';
-import {
-  useMutation,
-  useQuery,
-} from 'react-query';
-import {
-  deleteCategory,
-  getCategories,
-} from 'api';
-import {
-  Link,
-  useNavigate,
-} from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import useModal from 'hooks/useModal';
 
 const Categories = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
+  const { isOpen, closeModal, openModal } =
+    useModal();
   const { data, isLoading, refetch } = useQuery(
     'getCategories',
     getCategories,
@@ -47,23 +50,23 @@ const Categories = () => {
       },
     },
   );
-  console.log(data);
+
   return (
-    <section className="">
+    <section>
       <section className="flex mb-2 justify-between items-center">
         <h3 className="text-2xl font-medium">
           Categories
         </h3>
-        <ButtonLink
-          path="create"
-          className="text-base "
+        <Button
+          className="text-base capitalize"
+          onClick={() => openModal()}
         >
           <FontAwesomeIcon
             icon={faSquarePlus}
             className="mr-2"
           />
           <p>create</p>
-        </ButtonLink>
+        </Button>
       </section>
       {!isLoading && (
         <TableGenerator
@@ -78,6 +81,14 @@ const Categories = () => {
           }}
         />
       )}
+      <Modal isOpen={isOpen} onClose={closeModal}>
+        <div className="w-full space-y-2">
+          <h2 className="capitalize font-semibold text-xl">
+            create category
+          </h2>
+          <CreateCategoryForm />
+        </div>
+      </Modal>
     </section>
   );
 };

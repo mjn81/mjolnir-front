@@ -1,130 +1,76 @@
-import React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Slide,
-} from '@mui/material';
-import { TransitionProps } from '@mui/material/transitions';
-import {
-  Generator,
-  GeneratorProps,
-} from 'components/forms';
+import React, {
+  MouseEvent,
+  PropsWithChildren,
+} from 'react';
+import { motion } from 'framer-motion';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Portal } from 'react-portal';
+type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+} & PropsWithChildren;
 
-const Transition = React.forwardRef(
-  function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<any, any>;
+export const Modal = ({
+  isOpen,
+  children,
+  onClose,
+}: ModalProps) => {
+  const handleClose = (e: MouseEvent) => {
+    e.stopPropagation();
+    console.log(isOpen);
+    onClose();
+  };
+
+  const card_variants = {
+    open: { y: 0 },
+    close: { y: -650 },
+  };
+  const bg_variants = {
+    open: { opacity: 1, display: 'flex' },
+    close: {
+      opacity: 0,
+      display: 'none',
+      transition: {
+        display: {
+          delay: 0.5,
+        },
+      },
     },
-    ref: React.Ref<unknown>,
-  ) {
-    return (
-      <Slide
-        direction="up"
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
+  };
 
-export type FormModalProps = {
-  id: string;
-  open: boolean;
-  handleClose: () => void;
-  title: string;
-  context: string;
-  form?: GeneratorProps;
-};
-
-export const FormModal = ({
-  id,
-  open,
-  handleClose,
-  title,
-  context,
-  form,
-}: FormModalProps) => {
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      keepMounted
-      TransitionComponent={Transition}
-      aria-describedby={id}
+    <Portal
+      node={
+        document &&
+        document.getElementById('modal')
+      }
     >
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id={id}>
-          {context}
-        </DialogContentText>
-        {!!form && (
-          <Generator
-            initialValues={form.initialValues}
-            fields={form.fields}
-            submit={form.submit}
-            validator={form.validator}
-            submitBtn={form.submitBtn}
+      <motion.section
+        variants={bg_variants}
+        animate={isOpen ? 'open' : 'close'}
+        onClick={handleClose}
+        className="absolute h-screen w-screen top-0 left-0 justify-center items-center bg-neutral-focus bg-opacity-60 z-20"
+      >
+        <motion.div
+          variants={card_variants}
+          animate={isOpen ? 'open' : 'close'}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="relative card w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-primary-content"
+        >
+          <FontAwesomeIcon
+            onClick={handleClose}
+            className="absolute top-3 right-3 text-2xl text-error cursor-pointer"
+            icon={faCircleXmark}
           />
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-};
 
-export type ConfirmModalAction = {
-  label: string;
-  onClick: () => void;
-  [inp: string]: any;
-};
-
-export type ConfirmModalProps = {
-  id: string;
-  open: boolean;
-  handleClose: () => void;
-  title: string;
-  context: string;
-  actions: ConfirmModalAction[];
-};
-
-export const ConfirmModal = ({
-  id,
-  open,
-  handleClose,
-  title,
-  context,
-  actions,
-}: ConfirmModalProps) => {
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      keepMounted
-      TransitionComponent={Transition}
-      aria-describedby={id}
-    >
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id={id}>
-          {context}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        {actions.map(
-          ({ label, onClick, ...others }) => (
-            <Button
-              key={label}
-              onClick={onClick}
-              {...others}
-            >
-              {label}
-            </Button>
-          ),
-        )}
-      </DialogActions>
-    </Dialog>
+          <div className="card-body">
+            {children}
+          </div>
+        </motion.div>
+      </motion.section>
+    </Portal>
   );
 };

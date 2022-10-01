@@ -2,30 +2,53 @@ import React from 'react';
 
 import { Typography } from '@mui/material';
 import {
+  ALERT_TYPES,
   CreateCategorySchema,
   CREATE_CATEGORY_FIELDS,
   CREATE_CATEGORY_INITIAL_VALUES,
   CREATE_CATEGORY_VALIDATOR,
 } from 'constants/index';
 import { Generator } from './Generator';
+import { useSnackbar } from 'notistack';
+import { useMutation } from 'react-query';
+import { postCategory } from 'api';
 
-type CreateCategoryProps = {
-  submit: (
+export const CreateCategoryForm = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const { mutateAsync } = useMutation(
+    'postCreateCategory',
+    postCategory,
+    {
+      onSuccess: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.SUCCESS,
+        });
+      },
+      onError: ({ message }) => {
+        enqueueSnackbar(message, {
+          variant: ALERT_TYPES.ERROR,
+        });
+      },
+    },
+  );
+
+  const handleSubmit = (
     values: CreateCategorySchema,
-    options: any,
-  ) => void;
-};
+    { setSubmitting, resetForm },
+  ) => {
+    mutateAsync(values).then(() => {
+      setSubmitting(false);
+      resetForm();
+    });
+  };
 
-export const CreateCategoryForm = ({
-  submit,
-}: CreateCategoryProps) => {
   return (
     <Generator
       initialValues={
         CREATE_CATEGORY_INITIAL_VALUES
       }
       fields={CREATE_CATEGORY_FIELDS}
-      submit={submit}
+      submit={handleSubmit}
       validator={CREATE_CATEGORY_VALIDATOR}
       submitBtn={
         <Typography variant="h6" component="p">

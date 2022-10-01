@@ -1,4 +1,3 @@
-import { Box, Typography } from '@mui/material';
 import { postCategory } from 'api';
 import { CreateCategoryForm } from 'components';
 import {

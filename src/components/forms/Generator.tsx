@@ -82,6 +82,7 @@ export const Generator = ({
               type="submit"
               full
               disabled={isSubmitting}
+              className="capitalize"
             >
               {submitBtn}
             </Button>
