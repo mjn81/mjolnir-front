@@ -6,42 +6,10 @@ import React, {
 } from 'react';
 import { motion } from 'framer-motion';
 import { DropdownItemType } from 'constants/index';
-
-const wrapper_variants = {
-  open: {
-    height: 'auto',
-    opacity: 1,
-    transition: {
-      duration: 0.1,
-
-      when: 'beforeChildren',
-    },
-  },
-  closed: {
-    height: 0,
-    opacity: 0,
-
-    transition: {
-      duration: 0.1,
-      when: 'afterChildren',
-    },
-  },
-};
-
-const item_variants = {
-  open: (i: number) => ({
-    opacity: 1,
-    transition: {
-      duration: 0.25 * i,
-    },
-  }),
-  closed: {
-    opacity: 0,
-    transition: {
-      duration: 0,
-    },
-  },
-};
+import {
+  SimpleMenu,
+  SimpleMenuItem,
+} from './Menu';
 
 const arrow_variants = {
   open: {
@@ -77,36 +45,26 @@ export const DropdownButton = ({
           <FontAwesomeIcon icon={faCaretDown} />
         </motion.span>
       </button>
-      <motion.section
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        variants={wrapper_variants}
-        animate={isOpen ? 'open' : 'closed'}
-        className="overflow-hidden border absolute  z-40 top-full mt-2 -left-2 dropdown-content menu p-2 shadow bg-base-100 rounded-lg w-52"
-      >
+      <SimpleMenu isOpen={isOpen}>
         {options.map((option, index) => (
-          <motion.div
-            custom={index}
-            variants={item_variants}
-            animate={isOpen ? 'open' : 'closed'}
-            onClick={(e) => {
+          <SimpleMenuItem
+            key={`dropdown_${option.value}_${index}`}
+            index={index}
+            onClick={() => {
               option.onClick && option.onClick();
+              setIsOpen(false);
             }}
-            key={option.value}
-            className={
-              'cursor-pointer py-2 px-3 rounded-lg hover:bg-base-200 ' +
-              option.style
-            }
+            isOpen={isOpen}
+            className={option.style}
           >
             <FontAwesomeIcon
               icon={option.icon}
               className="mr-2"
             />
             {option.label}
-          </motion.div>
+          </SimpleMenuItem>
         ))}
-      </motion.section>
+      </SimpleMenu>
     </div>
   );
 };

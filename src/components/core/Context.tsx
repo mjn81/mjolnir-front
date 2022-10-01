@@ -3,7 +3,6 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import React from 'react';
 
 export type ContextMenuType = {
@@ -18,7 +17,7 @@ type ContextMenuProps = {
   ) => void;
   options: {
     label: string;
-    Icon?: React.ElementType;
+    Icon?: React.ReactNode;
     onClick: () => void;
   }[];
 };
@@ -32,40 +31,7 @@ export const ContextMenu = ({
     setContextMenu(null);
   };
 
-  return (
-    <Menu
-      open={contextMenu !== null}
-      onClose={handleClose}
-      anchorReference="anchorPosition"
-      anchorPosition={
-        contextMenu !== null
-          ? {
-              top: contextMenu.mouseY,
-              left: contextMenu.mouseX,
-            }
-          : undefined
-      }
-    >
-      {options.map(
-        ({ label, Icon, onClick }, index) => (
-          <MenuItem
-            onClick={() => {
-              onClick();
-              handleClose();
-            }}
-            key={`ctx_menu_${index}`}
-          >
-            {Icon && (
-              <ListItemIcon>
-                <Icon />
-              </ListItemIcon>
-            )}
-            {label}
-          </MenuItem>
-        ),
-      )}
-    </Menu>
-  );
+  return <div></div>;
 };
 
 type ContextProps = {
@@ -82,13 +48,13 @@ export const ContextMenuWrapper = ({
   handleClose,
 }: ContextProps) => {
   return (
-    <Box
+    <div
       onContextMenu={handleContextMenu}
       onMouseDownCapture={(e) => {
         if (e.button === 2) handleClose();
       }}
     >
       {children}
-    </Box>
+    </div>
   );
 };

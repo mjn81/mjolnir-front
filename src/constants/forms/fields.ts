@@ -53,7 +53,7 @@ export const UPLOAD_FILE_FIELDS: FieldsType = [
     required: true,
   },
   {
-    fieldType: FormFieldTypes.select,
+    fieldType: FormFieldTypes.multiSelect,
     name: 'category',
     placeholder: 'Category',
     getOptions: async () => {

@@ -57,7 +57,7 @@ export type CreateFolderSchema = Yup.InferType<
 export const UPLOAD_FILE_VALIDATOR = Yup.object({
   name: Yup.string().required(),
   file: Yup.mixed().required(),
-  category: Yup.string().required(),
+  category: Yup.array().min(1).required(),
 }).required();
 
 export type UploadFileSchema = Yup.InferType<

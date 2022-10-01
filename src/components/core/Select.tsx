@@ -1,15 +1,7 @@
-import React, { useEffect } from 'react';
-import {
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import React, { ChangeEvent } from 'react';
 import { useFormikContext } from 'formik';
-import { Box } from '@mui/system';
-import {
-  useQueries,
-  useQuery,
-} from 'react-query';
+import { useQuery } from 'react-query';
+import Select from 'react-select';
 
 type SelectFieldProps = {
   name: string;
@@ -28,44 +20,65 @@ export const SelectField = ({
   getOptions,
   ...others
 }: SelectFieldProps) => {
-  const {
-    setFieldValue,
-    values,
-  }: {
-    setFieldValue: (
-      name: string,
-      value: string,
-    ) => void;
-    values: any;
-  } = useFormikContext();
+  const { setFieldValue, values } =
+    useFormikContext();
   const { data } = useQuery(
-    'get-categories',
+    `name-${name}`,
     getOptions || (() => Promise.resolve([])),
   );
+  const handleOnChange = (
+    e: ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setFieldValue(name, e.currentTarget.value);
+  };
   return (
-    <Box marginBottom={5}>
-      <InputLabel id={id}>{label}</InputLabel>
-      <Select
-        fullWidth
-        labelId={id}
-        id={name}
-        value={values[name]}
-        label={placeholder}
-        placeholder={placeholder}
-        onChange={(e) => {
-          setFieldValue(
-            name,
-            e.target.value as string,
-          );
-        }}
-        {...others}
-      >
-        {data?.map(({ id, name }) => (
-          <MenuItem key={id} value={id}>
-            {name}
-          </MenuItem>
-        ))}
-      </Select>
-    </Box>
+    <select
+      onChange={handleOnChange}
+      value={values && values[name]}
+      className="select select-bordered w-full"
+      {...others}
+    >
+      <option disabled selected>
+        {placeholder}
+      </option>
+      {data?.map(({ id, name }) => (
+        <option key={id} value={id}>
+          {name}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+export const MultiSelectField = ({
+  name,
+  label,
+  id,
+  placeholder,
+  getOptions,
+  ...others
+}: SelectFieldProps) => {
+  const { setFieldValue, values } =
+    useFormikContext();
+  const { data } = useQuery(
+    `name-${name}`,
+    getOptions || (() => Promise.resolve([])),
+  );
+  const options = data?.map(({ id, name }) => ({
+    value: id,
+    label: name,
+  }));
+  const handleOnChange = (newValue) => {
+    setFieldValue(name, [...newValue]);
+  };
+  return (
+    <Select
+      isMulti
+      onChange={handleOnChange}
+      value={values && values[name]}
+      options={options}
+      className="w-full"
+      {...others}
+    />
   );
 };

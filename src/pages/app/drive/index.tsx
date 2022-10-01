@@ -1,12 +1,3 @@
-import {
-  CreateNewFolder,
-  Upload,
-} from '@mui/icons-material';
-import {
-  Button,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
 import { getDrive, postCreateFolder } from 'api';
 import { useSnackbar } from 'notistack';
 import React, {
@@ -17,31 +8,30 @@ import {
   useMutation,
   useQuery,
 } from 'react-query';
-import { Link } from 'react-router-dom';
 import {
+  Button,
   ContextMenu,
   ContextMenuWrapper,
   DriveFileItem,
   DriveFolderItem,
+  Modal,
+  UploadFileForm,
 } from 'components';
 import {
   ALERT_TYPES,
-  CREATE_FOLDER_DRIVE_MODAL_ID,
-  CREATE_FOLDER_FIELDS,
   CREATE_FOLDER_VALIDATOR,
-  DELETE_FOLDER_DRIVE_MODAL_ID,
 } from 'constants/index';
 import { useContextMenu } from 'hooks';
 import useModal from 'hooks/useModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const Drive = () => {
   // snackbar
   const { enqueueSnackbar } = useSnackbar();
-
-  // fetching directory logic
-
-  const [parentId, setParentId] = useState('');
-  const [id, setId] = useState('');
+  const [parentId, setParentId] =
+    useState<string>('');
+  const [id, setId] = useState<string>('');
   const { data, isLoading, refetch } = useQuery(
     'getDrive',
     () => getDrive(id),
@@ -88,24 +78,21 @@ const Drive = () => {
   } = useModal();
 
   // add on phase 2
-  const DeleteModalActions = React.useMemo(
-    () => [
-      {
-        label: 'Yes',
-        onClick: () => {
-          closeDeleteFolderModal();
-        },
-        color: 'error',
+  const DeleteModalActions = [
+    {
+      label: 'Yes',
+      onClick: () => {
+        closeDeleteFolderModal();
       },
-      {
-        label: 'No',
-        onClick: () => {
-          closeDeleteFolderModal();
-        },
+      color: 'error',
+    },
+    {
+      label: 'No',
+      onClick: () => {
+        closeDeleteFolderModal();
       },
-    ],
-    [],
-  );
+    },
+  ];
 
   // context logic
 
@@ -116,52 +103,37 @@ const Drive = () => {
     handleClose,
   } = useContextMenu();
 
-  const DriveMenuItems = React.useMemo(
-    () => [
-      {
-        label: 'New Folder',
-        Icon: CreateNewFolder,
-        onClick: openModal,
-      },
-    ],
-    [],
-  );
-
-  // improve performance
+  const DriveMenuItems = [
+    {
+      label: 'New Folder',
+      Icon: <FontAwesomeIcon icon={faUpload} />,
+      onClick: openModal,
+    },
+  ];
   return (
-    <div>
-      <Box
-        display="flex"
-        marginBottom={1}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Typography variant="h6" component="p">
+    <>
+      <section className="flex flex-row justify-between items-center">
+        <p className="text-2xl font-medium">
           Drive
-        </Typography>
-        <Link to={`upload/${id}`}>
-          <Button
-            variant="contained"
-            startIcon={<Upload />}
-          >
-            <Typography
-              variant="subtitle1"
-              textTransform="capitalize"
-            >
-              Upload File
-            </Typography>
-          </Button>
-        </Link>
-      </Box>
+        </p>
+
+        <Button
+          onClick={() => {
+            openModal();
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faUpload}
+            className="mr-2"
+          />
+          Upload
+        </Button>
+      </section>
       <ContextMenuWrapper
         handleContextMenu={handleContextMenu}
         handleClose={handleClose}
       >
-        <Box
-          component="section"
-          className="grid drive-full-height"
-        >
+        <section className="w-full">
           {!isLoading && !!id && (
             <DriveFolderItem
               openModal={openDeleteFolderModal}
@@ -196,7 +168,7 @@ const Drive = () => {
                 />
               ),
             )}
-        </Box>
+        </section>
         <ContextMenu
           contextMenu={contextMenu}
           setContextMenu={setContextMenu}
@@ -226,7 +198,20 @@ const Drive = () => {
           },
         }}
       /> */}
-
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          closeModal();
+          refetch();
+        }}
+      >
+        <div className="w-full space-y-3">
+          <h2 className="capitalize font-semibold text-xl">
+            upload file
+          </h2>
+          <UploadFileForm />
+        </div>
+      </Modal>
       {/* <ConfirmModal
         open={isOpenDeleteFolder}
         handleClose={closeDeleteFolderModal}
@@ -235,7 +220,7 @@ const Drive = () => {
         actions={DeleteModalActions}
         id={DELETE_FOLDER_DRIVE_MODAL_ID}
       /> */}
-    </div>
+    </>
   );
 };
 

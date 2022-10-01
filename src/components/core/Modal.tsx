@@ -63,7 +63,7 @@ export const Modal = ({
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className="relative card w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-primary-content"
+          className="relative overflow-visible card w-full sm:w-4/5 md:w-3/4 lg:w-1/2 bg-primary-content"
         >
           <FontAwesomeIcon
             onClick={handleClose}

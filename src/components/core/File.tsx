@@ -1,4 +1,3 @@
-import { Box, Typography } from '@mui/material';
 import { useFormikContext } from 'formik';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -27,27 +26,19 @@ export const FileDropField = ({
     useDropzone({ onDrop });
 
   return (
-    <Box
+    <div
+      className="mb-2 py-5 text-center border border-dashed border-gray-300 cursor-pointer rounded-lg"
       {...getRootProps()}
-      sx={{
-        marginBottom: 2,
-        paddingY: 3,
-        textAlign: 'center',
-        border: '1px dashed #ccc',
-        cursor: 'pointer',
-      }}
     >
       <input {...getInputProps()} />
       {!values[name] ? (
-        <Typography component="p">
+        <p>
           Drag &lsquo;n&lsquo; drop some files
           here, or click to select files
-        </Typography>
+        </p>
       ) : (
-        <Typography component="p">
-          {values[name].name}
-        </Typography>
+        <p>{values[name].name}</p>
       )}
-    </Box>
+    </div>
   );
 };

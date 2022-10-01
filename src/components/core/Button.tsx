@@ -25,7 +25,7 @@ export const Button = ({
   return (
     <button
       className={
-        'btn ' +
+        'btn text-base capitalize ' +
         (color ? color + ' ' : 'btn-primary ') +
         (full ? ' w-full' : '') +
         (className ? ' ' + className : '')

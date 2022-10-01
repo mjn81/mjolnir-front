@@ -13,6 +13,7 @@ import {
   Button,
   ColorPickerField,
   FileDropField,
+  MultiSelectField,
   SelectField,
   TextInput,
 } from 'components';
@@ -123,6 +124,13 @@ const FieldGenerator = ({
     case FormFieldTypes.select:
       return (
         <SelectField name={name} {...others} />
+      );
+    case FormFieldTypes.multiSelect:
+      return (
+        <MultiSelectField
+          name={name}
+          {...others}
+        />
       );
     case FormFieldTypes.file:
       return <FileDropField name={name} />;

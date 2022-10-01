@@ -90,15 +90,12 @@ const Categories = () => {
               <FontAwesomeIcon icon={faGears} />
               <p>action</p>
             </DropdownButton>
-            <Button
-              className="text-base capitalize"
-              onClick={() => openModal()}
-            >
+            <Button onClick={() => openModal()}>
               <FontAwesomeIcon
                 icon={faSquarePlus}
                 className="mr-2"
               />
-              <p>create</p>
+              create
             </Button>
           </div>
         </section>

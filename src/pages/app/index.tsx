@@ -11,10 +11,6 @@ const Categories = React.lazy(
   () => import('./category'),
 );
 
-const Upload = React.lazy(
-  () => import('./drive/upload'),
-);
-
 const AppRouter = () => {
   return (
     <Suspense fallback={<Loading />}>
@@ -22,16 +18,12 @@ const AppRouter = () => {
         <Route path="/" element={<AppLayout />}>
           <Route path="" element={<HomePage />} />
           <Route
-            path="categories"
+            path="tags"
             element={<Categories />}
           />
           <Route
             path="drive"
             element={<Drive />}
-          />
-          <Route
-            path="drive/upload"
-            element={<Upload />}
           />
           <Route
             path="/settings"

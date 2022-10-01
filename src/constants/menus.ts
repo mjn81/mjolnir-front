@@ -21,7 +21,7 @@ export const DRAWER_MENU = [
   {
     name: 'Tags',
     icon: faTags,
-    path: '/app/categories',
+    path: '/app/tags',
   },
   {
     name: 'Settings',

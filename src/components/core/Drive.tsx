@@ -90,11 +90,11 @@ export const DriveFolderItem = ({
           {name}
         </Typography>
       </Button>
-      <ContextMenu
+      {/* <ContextMenu
         contextMenu={contextMenu}
         setContextMenu={setContextMenu}
         options={DriveMenuItems}
-      />
+      /> */}
     </ContextMenuWrapper>
   );
 };

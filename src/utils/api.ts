@@ -22,9 +22,10 @@ export const get = async (uri: string) => {
 export const post = async (
   uri: string,
   data: any,
+  headers?: any,
 ) => {
   return axios
-    .post(uri, data)
+    .post(uri, data, headers)
     .then((res) => res.data);
 };
 
