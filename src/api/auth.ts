@@ -1,4 +1,5 @@
 import {
+  DistTokenSchema,
   LoginForm,
   RegisterForm,
 } from 'constants/index';
@@ -20,6 +21,8 @@ export const getProfile = async () => {
   return await get('user/me');
 };
 
-export const getDistToken = async () => {
-  return await get('auth/dist-token');
+export const getDistToken = async (
+  data: DistTokenSchema,
+) => {
+  return await post('auth/dist-token', data);
 };

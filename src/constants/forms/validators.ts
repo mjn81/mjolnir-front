@@ -63,3 +63,7 @@ export const UPLOAD_FILE_VALIDATOR = Yup.object({
 export type UploadFileSchema = Yup.InferType<
   typeof UPLOAD_FILE_VALIDATOR
 >;
+
+export type DistTokenSchema = {
+  category?: string;
+};
