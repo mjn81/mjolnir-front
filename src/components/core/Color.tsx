@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { ALERT_TYPES } from 'constants/index';
-import { useSnackbar } from 'notistack';
 import { hexToRgb } from 'utils';
 import { useFormikContext } from 'formik';
 import { SliderPicker } from 'react-color';
+import { toast } from 'react-toastify';
 
 export const ColorBox = ({
   color,
@@ -12,11 +12,8 @@ export const ColorBox = ({
   color: string;
 }) => {
   const rgb = hexToRgb(color)?.join(', ');
-  const { enqueueSnackbar } = useSnackbar();
   const afterCopy = () => {
-    enqueueSnackbar('copied!', {
-      variant: ALERT_TYPES.SUCCESS,
-    });
+    toast.success('copied!');
   };
   return (
     <section className="flex items-center space-x-3">

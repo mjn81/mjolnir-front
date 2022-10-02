@@ -8,7 +8,6 @@ import {
   CREATE_CATEGORY_VALIDATOR,
 } from 'constants/index';
 import { Generator } from './Generator';
-import { useSnackbar } from 'notistack';
 import {
   useMutation,
   useQuery,
@@ -18,6 +17,7 @@ import {
   postCategory,
   putCategory,
 } from 'api';
+import { toast } from 'react-toastify';
 
 type FormProps = {
   onClose?: () => void;
@@ -26,21 +26,15 @@ type FormProps = {
 export const CreateCategoryForm = ({
   onClose,
 }: FormProps) => {
-  const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(
     'postCreateCategory',
     postCategory,
     {
       onSuccess: ({ message }) => {
         onClose && onClose();
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.SUCCESS,
-        });
       },
       onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
+        toast.error(message);
       },
     },
   );
@@ -78,17 +72,11 @@ export const EditCategoryForm = ({
   id,
   onClose,
 }: EditCategoryProps) => {
-  const { enqueueSnackbar } = useSnackbar();
   const { data } = useQuery(
     ['getCategoryDetail', id],
     async () => getCategory(id),
     {
       enabled: !!id,
-      onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
-      },
     },
   );
   const catData = {
@@ -102,14 +90,10 @@ export const EditCategoryForm = ({
     {
       onSuccess: ({ message }) => {
         onClose && onClose();
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.SUCCESS,
-        });
+        toast.success(message);
       },
       onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
+        toast.error(message);
       },
     },
   );

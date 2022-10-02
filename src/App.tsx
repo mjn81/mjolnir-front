@@ -5,18 +5,20 @@ import {
   QueryClient,
   QueryCache,
 } from 'react-query';
-import { SnackbarProvider } from 'notistack';
-
+import {
+  toast,
+  ToastContainer,
+} from 'react-toastify';
 const queryClient = new QueryClient();
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   // put all context providers here
   return (
-    <SnackbarProvider maxSnack={3}>
-      <QueryClientProvider client={queryClient}>
-        <RouteManager />
-      </QueryClientProvider>
-    </SnackbarProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouteManager />
+      <ToastContainer />
+    </QueryClientProvider>
   );
 };
 

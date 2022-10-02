@@ -1,7 +1,7 @@
 import {
   faBarsProgress,
-  faBoxOpen,
   faGear,
+  faHardDrive,
   faHouse,
   faTags,
   faUserGear,
@@ -15,7 +15,7 @@ export const DRAWER_MENU = [
   },
   {
     name: 'Drive',
-    icon: faBoxOpen,
+    icon: faHardDrive,
     path: '/app/drive',
   },
   {

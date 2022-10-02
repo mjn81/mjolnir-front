@@ -1,23 +1,19 @@
 import {
-  Delete,
-  Folder,
-  InsertDriveFileOutlined,
-} from '@mui/icons-material';
-import {
-  Button,
-  Typography,
-} from '@mui/material';
+  faFile,
+  faFolder,
+  faFolderMinus,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContextMenu } from 'hooks';
-import React from 'react';
-import {
-  ContextMenu,
-  ContextMenuWrapper,
-} from './Context';
+import React, { MouseEvent } from 'react';
+import { ContextMenuWrapper } from './Context';
 
-type FolderItemProps = {
+type DriveItemProps = {
   name: string;
   id: string;
   setId: (id: string) => void;
+  setDeleteId: (id: string) => void;
+  setDeleteName: (name: string) => void;
   openModal: () => void;
   [inp: string]: any;
 };
@@ -26,9 +22,11 @@ export const DriveFolderItem = ({
   name,
   id,
   setId,
+  setDeleteId,
   openModal,
+  setDeleteName,
   ...others
-}: FolderItemProps) => {
+}: DriveItemProps) => {
   const handleDoubleClick = () => {
     setId(id);
   };
@@ -38,111 +36,67 @@ export const DriveFolderItem = ({
     handleContextMenu,
     setContextMenu,
   } = useContextMenu();
-  const DriveMenuItems = React.useMemo(
-    () => [
-      {
-        label: 'Delete Folder',
-        Icon: Delete,
-        onClick: openModal,
-      },
-    ],
-    [],
-  );
+
+  const handleContext = (e: MouseEvent) => {
+    handleContextMenu(e);
+    setDeleteId(id);
+    setDeleteName(name);
+  };
+  const DriveMenuItems = [
+    {
+      label: 'Delete Folder',
+      Icon: faFolderMinus,
+      onClick: openModal,
+    },
+  ];
   return (
     <ContextMenuWrapper
+      contextMenu={contextMenu}
       handleClose={handleClose}
-      handleContextMenu={handleContextMenu}
+      handleContextMenu={handleContext}
+      setContextMenu={setContextMenu}
+      options={DriveMenuItems}
     >
-      <Button
+      <div
         onDoubleClick={handleDoubleClick}
+        className="space-y-1 h-32 w-32 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-base-200 rounded-xl"
         {...others}
-        TouchRippleProps={{
-          classes: {
-            ripple: 'drive-ripple',
-          },
-        }}
-        sx={{
-          ':hover': {
-            backgroundColor: '#f5f5f5',
-          },
-          width: '100%',
-          display: 'flex',
-          position: 'relative',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          cursor: 'pointer',
-          borderRadius: 3,
-        }}
       >
-        <Folder
-          sx={{
-            fontSize: 100,
-            color: '#777',
-          }}
+        <FontAwesomeIcon
+          className="text-7xl"
+          icon={faFolder}
         />
-        <Typography
-          variant="h6"
-          textTransform="none"
-          color="#333"
-          fontSize={14}
-        >
+        <span className="select-none">
           {name}
-        </Typography>
-      </Button>
-      {/* <ContextMenu
-        contextMenu={contextMenu}
-        setContextMenu={setContextMenu}
-        options={DriveMenuItems}
-      /> */}
+        </span>
+      </div>
     </ContextMenuWrapper>
   );
 };
 export const DriveFileItem = ({
   name,
   id,
+  setDeleteId,
+  setDeleteName,
+  openModal,
   setId,
   ...others
-}: FolderItemProps) => {
+}: DriveItemProps) => {
   const handleDoubleClick = () => {
     setId(id);
   };
 
   return (
-    <Button
+    <div
       onDoubleClick={handleDoubleClick}
+      className="h-32 w-32 space-y-2 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-base-200 rounded-xl"
       {...others}
-      TouchRippleProps={{
-        classes: {
-          ripple: 'drive-ripple',
-        },
-      }}
-      sx={{
-        ':hover': {
-          backgroundColor: '#f5f5f5',
-        },
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-        borderRadius: 3,
-      }}
     >
-      <InsertDriveFileOutlined
-        sx={{
-          fontSize: 100,
-          color: '#777',
-        }}
+      <FontAwesomeIcon
+        className="text-6xl"
+        icon={faFile}
       />
-      <Typography
-        variant="h6"
-        textTransform="none"
-        color="#333"
-        fontSize={14}
-      >
-        {name}
-      </Typography>
-    </Button>
+      <span className="select-none">{name}</span>
+    </div>
   );
 };

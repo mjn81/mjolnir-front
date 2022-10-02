@@ -18,7 +18,6 @@ const item_variants = {
 
 type SimpleMenuItemProps = {
   index: number;
-  key: string;
   onClick?: (e?: MouseEvent) => void;
   className?: string;
   isOpen: boolean;
@@ -28,7 +27,6 @@ export const SimpleMenuItem = ({
   index,
   isOpen,
   onClick,
-  key,
   className,
   children,
 }: SimpleMenuItemProps) => {
@@ -41,7 +39,6 @@ export const SimpleMenuItem = ({
       onClick={() => {
         onClick && onClick();
       }}
-      key={key}
       className={
         'cursor-pointer py-2 px-3 rounded-lg hover:bg-base-200 ' +
         className
@@ -65,7 +62,7 @@ const wrapper_variants = {
   closed: {
     height: 0,
     opacity: 0,
-
+    display: 'none',
     transition: {
       duration: 0.1,
       when: 'afterChildren',
@@ -73,10 +70,18 @@ const wrapper_variants = {
   },
 };
 
+type SimpleMenuProps = {
+  isOpen: boolean;
+  className?: string;
+  style?: object;
+} & PropsWithChildren;
+
 export const SimpleMenu = ({
   isOpen,
+  className,
+  style,
   children,
-}: { isOpen: boolean } & PropsWithChildren) => {
+}: SimpleMenuProps) => {
   return (
     <motion.ul
       onClick={(e) => {
@@ -84,7 +89,11 @@ export const SimpleMenu = ({
       }}
       variants={wrapper_variants}
       animate={isOpen ? 'open' : 'closed'}
-      className="overflow-hidden border absolute z-40 top-full mt-2 -left-2 dropdown-content menu p-2 shadow bg-base-100 rounded-lg w-52"
+      className={
+        'overflow-hidden border absolute z-50 dropdown-content menu p-2 shadow bg-base-100 rounded-lg w-52 ' +
+        className
+      }
+      style={style}
     >
       {children}
     </motion.ul>

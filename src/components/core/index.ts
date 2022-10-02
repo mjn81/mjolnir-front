@@ -8,3 +8,4 @@ export * from './Button';
 export * from './Input';
 export * from './Color';
 export * from './Dropdown';
+export * from './Card';

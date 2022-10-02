@@ -7,7 +7,6 @@ import {
 import { Form, Formik, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { useSnackbar } from 'notistack';
 
 import {
   ALERT_TYPES,
@@ -19,27 +18,25 @@ import { AuthLayout } from 'layouts';
 import { postLogin } from 'api';
 import { useAuthStore } from 'context';
 import { mapUserToState } from 'utils/user';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const navigation = useNavigate();
   const login = useAuthStore(
     (state) => state.login,
   );
-  const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(postLogin, {
     onSuccess: (data) => {
       const user = mapUserToState(data);
       login(user, data.token);
-      enqueueSnackbar(data.message, {
-        variant: ALERT_TYPES.SUCCESS,
-      });
+      toast.success(data.message);
       navigation('/app', { replace: true });
     },
-    onError: (err) => {
-      console.log(err);
-      enqueueSnackbar('err', {
-        variant: ALERT_TYPES.ERROR,
-      });
+    onError: ({ response }) => {
+      const message = Object.values(
+        response.data.errors,
+      ).map((e: any) => e.name ?? e.message);
+      toast.error(message.join(', '));
     },
   });
   const handleLogin = (

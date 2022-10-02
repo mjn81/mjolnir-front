@@ -1,7 +1,4 @@
-import {
-  get,
-  post,
-} from 'utils';
+import { get, post } from 'utils';
 
 export const getDrive = async (id?: string) => {
   if (!id) return await get('/drive');

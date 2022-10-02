@@ -1,5 +1,4 @@
 import {
-  ALERT_TYPES,
   USER_ROLES,
   ADMIN_DRAWER_MENU,
   DRAWER_MENU,
@@ -16,7 +15,7 @@ import { motion } from 'framer-motion';
 
 import { getProfile } from 'api';
 import { useQuery } from 'react-query';
-import { useSnackbar } from 'notistack';
+import { toast } from 'react-toastify';
 import { useAuthStore } from 'context';
 import { useCurrentPath } from 'hooks';
 
@@ -72,7 +71,6 @@ export const AppLayout = () => {
   const user = useAuthStore(
     (state) => state.user,
   );
-  const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
   const [open, setOpen] = React.useState(false);
   const currentPath = useCurrentPath();
@@ -89,9 +87,7 @@ export const AppLayout = () => {
       },
       onError: ({ message }) => {
         logout();
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
+        toast.error(message);
         navigation('/auth/login', {
           replace: true,
         });
@@ -222,7 +218,7 @@ export const AppLayout = () => {
           </motion.div>
         </section>
       </motion.nav>
-      <section className="flex-1 p-6 ">
+      <section className="flex flex-col flex-1 p-6">
         <Outlet />
       </section>
     </main>

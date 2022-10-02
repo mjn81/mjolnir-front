@@ -20,3 +20,10 @@ export const UPLOAD_FILE_INITIAL_VALUES = {
   file: null,
   category: [],
 };
+
+export const CREATE_FOLDER_INITIAL_VALUES = (
+  parent: string,
+) => ({
+  name: '',
+  parent: parent,
+});

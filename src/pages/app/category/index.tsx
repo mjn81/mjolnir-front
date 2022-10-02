@@ -3,8 +3,6 @@ import {
   useMutation,
   useQuery,
 } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGears,
@@ -22,19 +20,19 @@ import {
   DropdownButton,
   EditCategoryForm,
   Modal,
-  SearchInput,
+  ModalFormCard,
   TableGenerator,
-  TextInput,
 } from 'components';
 import {
   ALERT_TYPES,
   CATEGORY_COLUMNS,
+  ACTION_DROPDOWN,
 } from 'constants/index';
 import useModal from 'hooks/useModal';
-import { ACTION_DROPDOWN } from 'constants/dropdown';
+import { PageLayout } from 'layouts';
+import { toast } from 'react-toastify';
 
 const Categories = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const [editId, setEditId] =
     useState<string>('');
   const { isOpen, closeModal, openModal } =
@@ -54,14 +52,10 @@ const Categories = () => {
     deleteCategory,
     {
       onSuccess: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.SUCCESS,
-        });
+        toast.success(message);
       },
       onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
+        toast.error(message);
       },
     },
   );
@@ -74,32 +68,29 @@ const Categories = () => {
     editClose();
     refetch();
   };
+
   return (
-    <section>
-      <header className="space-y-3 mb-4">
-        <h3 className="text-2xl font-medium space-x-2">
-          <FontAwesomeIcon icon={faTags} />
-          <span>Tags</span>
-        </h3>
-        <section className="flex items-center justify-between">
-          <SearchInput />
-          <div className="space-x-2">
-            <DropdownButton
-              options={ACTION_DROPDOWN}
-            >
-              <FontAwesomeIcon icon={faGears} />
-              <p>action</p>
-            </DropdownButton>
-            <Button onClick={() => openModal()}>
-              <FontAwesomeIcon
-                icon={faSquarePlus}
-                className="mr-2"
-              />
-              create
-            </Button>
-          </div>
-        </section>
-      </header>
+    <PageLayout
+      title="Tags"
+      icon={faTags}
+      actions={
+        <div className="space-x-2">
+          <DropdownButton
+            options={ACTION_DROPDOWN}
+          >
+            <FontAwesomeIcon icon={faGears} />
+            <p>action</p>
+          </DropdownButton>
+          <Button onClick={() => openModal()}>
+            <FontAwesomeIcon
+              icon={faSquarePlus}
+              className="mr-2"
+            />
+            create
+          </Button>
+        </div>
+      }
+    >
       {!isLoading && (
         <TableGenerator
           counter
@@ -118,12 +109,9 @@ const Categories = () => {
         isOpen={isOpen}
         onClose={handleCloseModal}
       >
-        <div className="w-full space-y-3">
-          <h2 className="capitalize font-semibold text-xl">
-            create tag
-          </h2>
+        <ModalFormCard title="create tag">
           <CreateCategoryForm />
-        </div>
+        </ModalFormCard>
       </Modal>
       <Modal
         isOpen={editIsOpen}
@@ -132,19 +120,16 @@ const Categories = () => {
           setEditId('');
         }}
       >
-        <div className="w-full space-y-3">
-          <h2 className="capitalize font-semibold text-xl">
-            edit tag
-          </h2>
+        <ModalFormCard title="edit tag">
           {!!editId && (
             <EditCategoryForm
               id={editId}
               onClose={handleEditCloseModal}
             />
           )}
-        </div>
+        </ModalFormCard>
       </Modal>
-    </section>
+    </PageLayout>
   );
 };
 

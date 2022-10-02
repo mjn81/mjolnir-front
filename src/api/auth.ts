@@ -21,5 +21,5 @@ export const getProfile = async () => {
 };
 
 export const getDistToken = async () => {
-  return await get('auth/distToken');
+  return await get('auth/dist-token');
 };

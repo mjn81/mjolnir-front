@@ -1,5 +1,4 @@
-import { getDrive, postCreateFolder } from 'api';
-import { useSnackbar } from 'notistack';
+import { getDrive } from 'api';
 import React, {
   useEffect,
   useState,
@@ -10,61 +9,58 @@ import {
 } from 'react-query';
 import {
   Button,
-  ContextMenu,
   ContextMenuWrapper,
+  CreateFolderForm,
   DriveFileItem,
   DriveFolderItem,
   Modal,
+  ModalFormCard,
   UploadFileForm,
 } from 'components';
-import {
-  ALERT_TYPES,
-  CREATE_FOLDER_VALIDATOR,
-} from 'constants/index';
+import { ALERT_TYPES } from 'constants/index';
 import { useContextMenu } from 'hooks';
 import useModal from 'hooks/useModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFolderPlus,
+  faHardDrive,
+  faUpload,
+} from '@fortawesome/free-solid-svg-icons';
+import { PageLayout } from 'layouts';
+import { toast } from 'react-toastify';
 
 const Drive = () => {
   // snackbar
-  const { enqueueSnackbar } = useSnackbar();
   const [parentId, setParentId] =
     useState<string>('');
-  const [id, setId] = useState<string>('');
-  const { data, isLoading, refetch } = useQuery(
-    'getDrive',
-    () => getDrive(id),
-  );
+  const [folderId, setFolderId] =
+    useState<string>('');
+  const [fileId, setFileId] =
+    useState<string>('');
+  const [deleteFileId, setFileDeleteId] =
+    useState<string>('');
+  const [deleteFolderId, setFolderDeleteId] =
+    useState<string>('');
+  const [deleteName, setDeleteName] =
+    useState<string>('');
 
+  const { data, isLoading, refetch } = useQuery(
+    'getFolderDrive',
+    () => getDrive(folderId),
+  );
+  // const { mutateAsync } = useMutation('deleteFolder', );
   const refetchCurrentDirectory = () => {
     refetch()
       .then(({ data }) => {
         setParentId(data.parentId ?? null);
       })
       .catch(() => {
-        enqueueSnackbar('Error', {
-          variant: ALERT_TYPES.ERROR,
-        });
+        toast.error('Error');
       });
   };
   useEffect(() => {
     refetchCurrentDirectory();
-  }, [id]);
-  const { mutateAsync } = useMutation(
-    'createFolder',
-    postCreateFolder,
-    {
-      onSuccess: () => {
-        refetchCurrentDirectory();
-      },
-      onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
-      },
-    },
-  );
+  }, [folderId]);
 
   // modal logic
 
@@ -76,23 +72,11 @@ const Drive = () => {
     openModal: openDeleteFolderModal,
     closeModal: closeDeleteFolderModal,
   } = useModal();
-
-  // add on phase 2
-  const DeleteModalActions = [
-    {
-      label: 'Yes',
-      onClick: () => {
-        closeDeleteFolderModal();
-      },
-      color: 'error',
-    },
-    {
-      label: 'No',
-      onClick: () => {
-        closeDeleteFolderModal();
-      },
-    },
-  ];
+  const {
+    isOpen: isOpenCreateFolder,
+    openModal: openCreateFolderModal,
+    closeModal: closeCreateFolderModal,
+  } = useModal();
 
   // context logic
 
@@ -106,17 +90,15 @@ const Drive = () => {
   const DriveMenuItems = [
     {
       label: 'New Folder',
-      Icon: <FontAwesomeIcon icon={faUpload} />,
-      onClick: openModal,
+      Icon: faFolderPlus,
+      onClick: openCreateFolderModal,
     },
   ];
   return (
-    <>
-      <section className="flex flex-row justify-between items-center">
-        <p className="text-2xl font-medium">
-          Drive
-        </p>
-
+    <PageLayout
+      title="Drive"
+      icon={faHardDrive}
+      actions={
         <Button
           onClick={() => {
             openModal();
@@ -128,19 +110,26 @@ const Drive = () => {
           />
           Upload
         </Button>
-      </section>
+      }
+    >
       <ContextMenuWrapper
-        handleContextMenu={handleContextMenu}
+        contextMenu={contextMenu}
         handleClose={handleClose}
+        setContextMenu={setContextMenu}
+        options={DriveMenuItems}
+        handleContextMenu={handleContextMenu}
+        className="flex-1"
       >
-        <section className="w-full">
-          {!isLoading && !!id && (
+        <section className="w-full flex">
+          {!isLoading && !!folderId && (
             <DriveFolderItem
               openModal={openDeleteFolderModal}
               id={parentId}
-              setId={setId}
+              setId={setFolderId}
+              setDeleteId={() => {}}
+              setDeleteName={() => {}}
               name="..."
-              key={`back_folder_${id}`}
+              key={`back_folder_${folderId}`}
             />
           )}
           {!isLoading &&
@@ -149,7 +138,9 @@ const Drive = () => {
               type === 'folder' ? (
                 <DriveFolderItem
                   id={id}
-                  setId={setId}
+                  setId={setFolderId}
+                  setDeleteId={setFolderDeleteId}
+                  setDeleteName={setDeleteName}
                   name={name}
                   key={`folder_${id}`}
                   openModal={
@@ -159,7 +150,9 @@ const Drive = () => {
               ) : (
                 <DriveFileItem
                   id={id}
-                  setId={setId}
+                  setId={setFileId}
+                  setDeleteId={setFileDeleteId}
+                  setDeleteName={setDeleteName}
                   name={name}
                   key={`file_${id}`}
                   openModal={
@@ -169,35 +162,8 @@ const Drive = () => {
               ),
             )}
         </section>
-        <ContextMenu
-          contextMenu={contextMenu}
-          setContextMenu={setContextMenu}
-          options={DriveMenuItems}
-        />
       </ContextMenuWrapper>
 
-      {/* <FormModal
-        id={CREATE_FOLDER_DRIVE_MODAL_ID}
-        title="new folder"
-        context="create new folder here"
-        open={isOpen}
-        handleClose={closeModal}
-        form={{
-          fields: CREATE_FOLDER_FIELDS,
-          initialValues: {
-            name: '',
-            parent: id,
-          },
-          validator: CREATE_FOLDER_VALIDATOR,
-          submitBtn: <span>submit</span>,
-          submit: (data, { setSubmitting }) => {
-            mutateAsync(data).finally(() => {
-              setSubmitting(false);
-              closeModal();
-            });
-          },
-        }}
-      /> */}
       <Modal
         isOpen={isOpen}
         onClose={() => {
@@ -205,22 +171,60 @@ const Drive = () => {
           refetch();
         }}
       >
-        <div className="w-full space-y-3">
-          <h2 className="capitalize font-semibold text-xl">
-            upload file
-          </h2>
+        <ModalFormCard title="upload file">
           <UploadFileForm />
-        </div>
+        </ModalFormCard>
       </Modal>
-      {/* <ConfirmModal
-        open={isOpenDeleteFolder}
-        handleClose={closeDeleteFolderModal}
-        title="delete folder"
-        context="are you sure you want to delete this folder?"
-        actions={DeleteModalActions}
-        id={DELETE_FOLDER_DRIVE_MODAL_ID}
-      /> */}
-    </>
+
+      <Modal
+        isOpen={isOpenCreateFolder}
+        onClose={() => {
+          closeCreateFolderModal();
+          refetchCurrentDirectory();
+        }}
+      >
+        <ModalFormCard title="create folder">
+          <CreateFolderForm parentId={folderId} />
+        </ModalFormCard>
+      </Modal>
+      <Modal
+        isOpen={isOpenDeleteFolder}
+        onClose={() => {
+          closeDeleteFolderModal();
+        }}
+      >
+        <ModalFormCard title="delete folder">
+          <p className="text-lg">
+            Are you sure you want to delete{' '}
+            <span className="font-bold">
+              {deleteName}
+            </span>{' '}
+            folder ?
+          </p>
+          <div className="flex justify-center items-center space-x-5">
+            <Button
+              onClick={() => {
+                closeDeleteFolderModal();
+                refetchCurrentDirectory();
+              }}
+              color="btn-error"
+              className="btn-wide text-primary-content"
+            >
+              yes
+            </Button>
+            <Button
+              color="btn"
+              onClick={() =>
+                closeDeleteFolderModal()
+              }
+              className="btn-wide text-primary-content"
+            >
+              no
+            </Button>
+          </div>
+        </ModalFormCard>
+      </Modal>
+    </PageLayout>
   );
 };
 

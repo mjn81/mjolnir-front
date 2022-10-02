@@ -45,7 +45,10 @@ export const DropdownButton = ({
           <FontAwesomeIcon icon={faCaretDown} />
         </motion.span>
       </button>
-      <SimpleMenu isOpen={isOpen}>
+      <SimpleMenu
+        className="top-full mt-2 -left-2"
+        isOpen={isOpen}
+      >
         {options.map((option, index) => (
           <SimpleMenuItem
             key={`dropdown_${option.value}_${index}`}

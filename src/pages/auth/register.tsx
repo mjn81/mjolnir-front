@@ -6,8 +6,6 @@ import {
 } from 'components';
 import { postRegister } from 'api';
 import {
-  ALERT_TYPES,
-  MESSAGE,
   RegisterForm,
   REGISTER_INITIAL_VALUES,
   REGISTER_VALIDATOR,
@@ -19,15 +17,14 @@ import {
   Link,
   useNavigate,
 } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { mapUserToState } from 'utils/user';
 import { useAuthStore } from 'context';
+import { toast } from 'react-toastify';
 
 const RegisterPage = () => {
   const login = useAuthStore(
     (state) => state.login,
   );
-  const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
   const { mutateAsync } = useMutation(
     postRegister,
@@ -35,17 +32,13 @@ const RegisterPage = () => {
       onSuccess: (data) => {
         const user = mapUserToState(data);
         login(user, data.token);
-        enqueueSnackbar(data.message, {
-          variant: ALERT_TYPES.SUCCESS,
-        });
+        toast.success(data.message);
         navigation('/app', {
           replace: true,
         });
       },
       onError: ({ message }) => {
-        enqueueSnackbar(message, {
-          variant: ALERT_TYPES.ERROR,
-        });
+        toast.error(message);
       },
     },
   );
