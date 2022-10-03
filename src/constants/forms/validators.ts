@@ -67,3 +67,11 @@ export type UploadFileSchema = Yup.InferType<
 export type DistTokenSchema = {
   category?: string;
 };
+
+export const EDIT_FOLDER_VALIDATOR = Yup.object({
+  name: Yup.string().required(),
+}).required();
+
+export type EditFolderSchema = Yup.InferType<
+  typeof EDIT_FOLDER_VALIDATOR
+>;

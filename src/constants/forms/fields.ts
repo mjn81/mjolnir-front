@@ -64,3 +64,13 @@ export const UPLOAD_FILE_FIELDS: FieldsType = [
     required: true,
   },
 ];
+
+export const EDIT_FOLDER_FIELDS: FieldsType = [
+  {
+    fieldType: FormFieldTypes.input,
+    name: 'name',
+    placeholder: 'Name',
+    type: 'text',
+    required: true,
+  },
+];

@@ -1,24 +1,32 @@
 import React from 'react';
 import { Generator } from './Generator';
 import {
-  ALERT_TYPES,
+  CreateFolderSchema,
   CREATE_FOLDER_FIELDS,
   CREATE_FOLDER_INITIAL_VALUES,
   CREATE_FOLDER_VALIDATOR,
+  EDIT_FOLDER_FIELDS,
+  EDIT_FOLDER_VALIDATOR,
   UploadFileSchema,
   UPLOAD_FILE_FIELDS,
   UPLOAD_FILE_INITIAL_VALUES,
   UPLOAD_FILE_VALIDATOR,
 } from 'constants/index';
 import {
+  getFolder,
   postCreateFile,
   postCreateFolder,
+  putEditFolder,
 } from 'api';
-import { useMutation } from 'react-query';
+import {
+  useMutation,
+  useQuery,
+} from 'react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCloudArrowUp,
   faFolderPlus,
+  faPenToSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
@@ -118,6 +126,56 @@ export const CreateFolderForm = ({
           Create Folder
           <FontAwesomeIcon
             icon={faFolderPlus}
+            className="ml-2"
+          />
+        </span>
+      }
+      submit={handleSubmit}
+    />
+  );
+};
+
+export const EditFolderForm = ({
+  id,
+}: {
+  id: string;
+}) => {
+  const { data } = useQuery(
+    ['folder', id],
+    async () => getFolder(id),
+  );
+  const { mutateAsync } = useMutation(
+    ['editFolder', id],
+    async (data: CreateFolderSchema) =>
+      putEditFolder(id, data),
+    {
+      onError: ({ message }) => {
+        toast.error(message);
+      },
+    },
+  );
+  const initData = {
+    name: data?.name,
+  };
+  const handleSubmit = (
+    data,
+    { setSubmitting },
+  ) => {
+    mutateAsync(data).finally(() => {
+      setSubmitting(false);
+    });
+  };
+
+  return (
+    <Generator
+      initialValues={initData}
+      fields={EDIT_FOLDER_FIELDS}
+      validator={EDIT_FOLDER_VALIDATOR}
+      submitBtn={
+        <span>
+          edit folder
+          <FontAwesomeIcon
+            icon={faPenToSquare}
             className="ml-2"
           />
         </span>

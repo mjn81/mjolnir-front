@@ -1,8 +1,8 @@
-import { get, post, del } from 'utils';
+import { get, post, del, put } from 'utils';
 
 export const getDrive = async (id?: string) => {
   if (!id) return await get('/drive');
-  return await get(`drive/${id}`);
+  return await get(`/drive/${id}`);
 };
 
 export const postCreateFolder = async (data: {
@@ -23,5 +23,16 @@ export const postCreateFile = async (
 };
 
 export const deleteFile = async (id: string) => {
-  return await del(`file/${id}`);
+  return await del(`/file/${id}`);
+};
+
+export const putEditFolder = async (
+  id: string,
+  data: any,
+) => {
+  return await put(`/folder/${id}`, data);
+};
+
+export const getFolder = async (id: string) => {
+  return await get(`/folder/${id}`);
 };

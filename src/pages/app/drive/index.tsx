@@ -13,6 +13,7 @@ import {
   CreateFolderForm,
   DriveFileItem,
   DriveFolderItem,
+  EditFolderForm,
   Modal,
   ModalFormCard,
   UploadFileForm,
@@ -37,9 +38,9 @@ const Drive = () => {
     useState<string>('');
   const [fileId, setFileId] =
     useState<string>('');
-  const [deleteFileId, setFileDeleteId] =
+  const [actionFileId, setActionFileId] =
     useState<string>('');
-  const [deleteFolderId, setFolderDeleteId] =
+  const [actionFolderId, setActionFolderId] =
     useState<string>('');
   const [deleteName, setDeleteName] =
     useState<string>('');
@@ -77,7 +78,11 @@ const Drive = () => {
     openModal: openCreateFolderModal,
     closeModal: closeCreateFolderModal,
   } = useModal();
-
+  const {
+    isOpen: isOpenEditFolder,
+    openModal: openEditFolderModal,
+    closeModal: closeEditFolderModal,
+  } = useModal();
   // context logic
 
   const {
@@ -122,10 +127,9 @@ const Drive = () => {
         <section className="w-full flex">
           {!isLoading && !!folderId && (
             <DriveFolderItem
-              openModal={openDeleteModal}
               id={parentId}
               setId={setFolderId}
-              setDeleteId={() => {}}
+              setActionId={() => {}}
               setDeleteName={() => {}}
               context={{
                 contextMenu: null,
@@ -133,6 +137,8 @@ const Drive = () => {
                 handleContextMenu: () => {},
                 setContextMenu: () => {},
               }}
+              openDeleteModal={() => {}}
+              openEditModal={() => {}}
               name="..."
               key={`back_folder_${folderId}`}
             />
@@ -144,21 +150,31 @@ const Drive = () => {
                 <DriveFolderItem
                   id={id}
                   setId={setFolderId}
-                  setDeleteId={setFolderDeleteId}
+                  setActionId={setActionFolderId}
                   setDeleteName={setDeleteName}
                   name={name}
                   key={`folder_${id}`}
-                  openModal={openDeleteModal}
+                  openDeleteModal={
+                    openDeleteModal
+                  }
+                  openEditModal={
+                    openEditFolderModal
+                  }
                 />
               ) : (
                 <DriveFileItem
                   id={id}
                   setId={setFileId}
-                  setDeleteId={setFileDeleteId}
+                  setActionId={setActionFileId}
                   setDeleteName={setDeleteName}
                   name={name}
                   key={`file_${id}`}
-                  openModal={openDeleteModal}
+                  openDeleteModal={
+                    openDeleteModal
+                  }
+                  openEditModal={
+                    openEditFolderModal
+                  }
                 />
               ),
             )}
@@ -200,9 +216,9 @@ const Drive = () => {
             <span className="font-bold">
               {deleteName}
             </span>{' '}
-            {deleteFolderId
+            {actionFolderId
               ? 'folder'
-              : deleteFileId
+              : actionFileId
               ? 'file'
               : ''}{' '}
             ?
@@ -210,13 +226,13 @@ const Drive = () => {
           <div className="flex justify-center items-center space-x-5">
             <Button
               onClick={() => {
-                if (deleteFolderId) {
-                  setFolderDeleteId('');
-                } else if (deleteFileId) {
-                  deleteFile(deleteFileId).then(
+                if (actionFolderId) {
+                  setActionFolderId('');
+                } else if (actionFileId) {
+                  deleteFile(actionFileId).then(
                     refetchCurrentDirectory,
                   );
-                  setFileDeleteId('');
+                  setActionFileId('');
                 }
                 closeDeleteModal();
               }}
@@ -229,10 +245,10 @@ const Drive = () => {
               color="btn"
               onClick={() => {
                 closeDeleteModal();
-                if (deleteFolderId) {
-                  setFolderDeleteId('');
-                } else if (deleteFileId) {
-                  setFileDeleteId('');
+                if (actionFolderId) {
+                  setActionFolderId('');
+                } else if (actionFileId) {
+                  setActionFileId('');
                 }
               }}
               className="btn-wide text-primary-content"
@@ -240,6 +256,19 @@ const Drive = () => {
               no
             </Button>
           </div>
+        </ModalFormCard>
+      </Modal>
+
+      <Modal
+        isOpen={isOpenEditFolder}
+        onClose={() => {
+          setActionFolderId('');
+          refetchCurrentDirectory();
+          closeEditFolderModal();
+        }}
+      >
+        <ModalFormCard title="edit folder">
+          <EditFolderForm id={actionFolderId} />
         </ModalFormCard>
       </Modal>
     </PageLayout>

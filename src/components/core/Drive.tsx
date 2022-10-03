@@ -1,23 +1,23 @@
-import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import React from 'react';
 import {
-  faCircleMinus,
   faFile,
   faFileCircleMinus,
   faFolder,
   faFolderMinus,
+  faPenToSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContextMenu } from 'hooks';
-import React, { MouseEvent } from 'react';
 import { ContextMenuWrapper } from './Context';
 
 type DriveItemProps = {
   name: string;
   id: string;
   setId: (id: string) => void;
-  setDeleteId: (id: string) => void;
+  setActionId: (id: string) => void;
   setDeleteName: (name: string) => void;
-  openModal: () => void;
+  openDeleteModal: () => void;
+  openEditModal: () => void;
   [inp: string]: any;
 };
 
@@ -25,9 +25,10 @@ export const DriveFolderItem = ({
   name,
   id,
   setId,
-  setDeleteId,
+  setActionId,
   setDeleteName,
-  openModal,
+  openDeleteModal,
+  openEditModal,
   ...others
 }: DriveItemProps) => {
   const handleDoubleClick = () => {
@@ -44,9 +45,17 @@ export const DriveFolderItem = ({
       label: 'Delete Folder',
       Icon: faFolderMinus,
       onClick: () => {
-        setDeleteId(id);
+        setActionId(id);
         setDeleteName(name);
-        openModal();
+        openDeleteModal();
+      },
+    },
+    {
+      label: 'Edit Folder',
+      Icon: faPenToSquare,
+      onClick: () => {
+        setActionId(id);
+        openEditModal();
       },
     },
   ];
@@ -77,10 +86,10 @@ export const DriveFolderItem = ({
 export const DriveFileItem = ({
   name,
   id,
-  setDeleteId,
+  setActionId,
   setDeleteName,
   setId,
-  openModal,
+  openDeleteModal,
   ...others
 }: DriveItemProps) => {
   const handleDoubleClick = () => {
@@ -97,9 +106,9 @@ export const DriveFileItem = ({
       label: 'Delete File',
       Icon: faFileCircleMinus,
       onClick: () => {
-        setDeleteId(id);
+        setActionId(id);
         setDeleteName(name);
-        openModal();
+        openDeleteModal();
       },
     },
   ];
