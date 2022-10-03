@@ -1,4 +1,4 @@
-import { getDrive } from 'api';
+import { deleteFile, getDrive } from 'api';
 import React, {
   useEffect,
   useState,
@@ -68,9 +68,9 @@ const Drive = () => {
     useModal();
 
   const {
-    isOpen: isOpenDeleteFolder,
-    openModal: openDeleteFolderModal,
-    closeModal: closeDeleteFolderModal,
+    isOpen: isOpenDelete,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
   } = useModal();
   const {
     isOpen: isOpenCreateFolder,
@@ -86,7 +86,6 @@ const Drive = () => {
     handleContextMenu,
     handleClose,
   } = useContextMenu();
-
   const DriveMenuItems = [
     {
       label: 'New Folder',
@@ -123,11 +122,17 @@ const Drive = () => {
         <section className="w-full flex">
           {!isLoading && !!folderId && (
             <DriveFolderItem
-              openModal={openDeleteFolderModal}
+              openModal={openDeleteModal}
               id={parentId}
               setId={setFolderId}
               setDeleteId={() => {}}
               setDeleteName={() => {}}
+              context={{
+                contextMenu: null,
+                handleClose: () => {},
+                handleContextMenu: () => {},
+                setContextMenu: () => {},
+              }}
               name="..."
               key={`back_folder_${folderId}`}
             />
@@ -143,9 +148,7 @@ const Drive = () => {
                   setDeleteName={setDeleteName}
                   name={name}
                   key={`folder_${id}`}
-                  openModal={
-                    openDeleteFolderModal
-                  }
+                  openModal={openDeleteModal}
                 />
               ) : (
                 <DriveFileItem
@@ -155,9 +158,7 @@ const Drive = () => {
                   setDeleteName={setDeleteName}
                   name={name}
                   key={`file_${id}`}
-                  openModal={
-                    openDeleteFolderModal
-                  }
+                  openModal={openDeleteModal}
                 />
               ),
             )}
@@ -172,7 +173,7 @@ const Drive = () => {
         }}
       >
         <ModalFormCard title="upload file">
-          <UploadFileForm />
+          <UploadFileForm folderId={folderId} />
         </ModalFormCard>
       </Modal>
 
@@ -188,9 +189,9 @@ const Drive = () => {
         </ModalFormCard>
       </Modal>
       <Modal
-        isOpen={isOpenDeleteFolder}
+        isOpen={isOpenDelete}
         onClose={() => {
-          closeDeleteFolderModal();
+          closeDeleteModal();
         }}
       >
         <ModalFormCard title="delete folder">
@@ -199,13 +200,25 @@ const Drive = () => {
             <span className="font-bold">
               {deleteName}
             </span>{' '}
-            folder ?
+            {deleteFolderId
+              ? 'folder'
+              : deleteFileId
+              ? 'file'
+              : ''}{' '}
+            ?
           </p>
           <div className="flex justify-center items-center space-x-5">
             <Button
               onClick={() => {
-                closeDeleteFolderModal();
-                refetchCurrentDirectory();
+                if (deleteFolderId) {
+                  setFolderDeleteId('');
+                } else if (deleteFileId) {
+                  deleteFile(deleteFileId).then(
+                    refetchCurrentDirectory,
+                  );
+                  setFileDeleteId('');
+                }
+                closeDeleteModal();
               }}
               color="btn-error"
               className="btn-wide text-primary-content"
@@ -214,9 +227,14 @@ const Drive = () => {
             </Button>
             <Button
               color="btn"
-              onClick={() =>
-                closeDeleteFolderModal()
-              }
+              onClick={() => {
+                closeDeleteModal();
+                if (deleteFolderId) {
+                  setFolderDeleteId('');
+                } else if (deleteFileId) {
+                  setFileDeleteId('');
+                }
+              }}
               className="btn-wide text-primary-content"
             >
               no

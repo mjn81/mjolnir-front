@@ -1,4 +1,4 @@
-import { get, post } from 'utils';
+import { get, post, del } from 'utils';
 
 export const getDrive = async (id?: string) => {
   if (!id) return await get('/drive');
@@ -20,4 +20,8 @@ export const postCreateFile = async (
   return await post('/file', data, {
     'Content-Type': 'multipart/form-data',
   });
+};
+
+export const deleteFile = async (id: string) => {
+  return await del(`file/${id}`);
 };

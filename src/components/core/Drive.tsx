@@ -1,5 +1,8 @@
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import {
+  faCircleMinus,
   faFile,
+  faFileCircleMinus,
   faFolder,
   faFolderMinus,
 } from '@fortawesome/free-solid-svg-icons';
@@ -23,8 +26,8 @@ export const DriveFolderItem = ({
   id,
   setId,
   setDeleteId,
-  openModal,
   setDeleteName,
+  openModal,
   ...others
 }: DriveItemProps) => {
   const handleDoubleClick = () => {
@@ -36,24 +39,22 @@ export const DriveFolderItem = ({
     handleContextMenu,
     setContextMenu,
   } = useContextMenu();
-
-  const handleContext = (e: MouseEvent) => {
-    handleContextMenu(e);
-    setDeleteId(id);
-    setDeleteName(name);
-  };
   const DriveMenuItems = [
     {
       label: 'Delete Folder',
       Icon: faFolderMinus,
-      onClick: openModal,
+      onClick: () => {
+        setDeleteId(id);
+        setDeleteName(name);
+        openModal();
+      },
     },
   ];
   return (
     <ContextMenuWrapper
       contextMenu={contextMenu}
       handleClose={handleClose}
-      handleContextMenu={handleContext}
+      handleContextMenu={handleContextMenu}
       setContextMenu={setContextMenu}
       options={DriveMenuItems}
     >
@@ -78,25 +79,51 @@ export const DriveFileItem = ({
   id,
   setDeleteId,
   setDeleteName,
-  openModal,
   setId,
+  openModal,
   ...others
 }: DriveItemProps) => {
   const handleDoubleClick = () => {
     setId(id);
   };
-
+  const {
+    contextMenu,
+    handleClose,
+    handleContextMenu,
+    setContextMenu,
+  } = useContextMenu();
+  const DriveMenuItems = [
+    {
+      label: 'Delete File',
+      Icon: faFileCircleMinus,
+      onClick: () => {
+        setDeleteId(id);
+        setDeleteName(name);
+        openModal();
+      },
+    },
+  ];
   return (
-    <div
-      onDoubleClick={handleDoubleClick}
-      className="h-32 w-32 space-y-2 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-base-200 rounded-xl"
-      {...others}
+    <ContextMenuWrapper
+      contextMenu={contextMenu}
+      handleClose={handleClose}
+      handleContextMenu={handleContextMenu}
+      setContextMenu={setContextMenu}
+      options={DriveMenuItems}
     >
-      <FontAwesomeIcon
-        className="text-6xl"
-        icon={faFile}
-      />
-      <span className="select-none">{name}</span>
-    </div>
+      <div
+        onDoubleClick={handleDoubleClick}
+        className="h-32 w-32 space-y-2 flex flex-col justify-center items-center text-center cursor-pointer hover:bg-base-200 rounded-xl"
+        {...others}
+      >
+        <FontAwesomeIcon
+          className="text-6xl"
+          icon={faFile}
+        />
+        <span className="select-none">
+          {name}
+        </span>
+      </div>
+    </ContextMenuWrapper>
   );
 };

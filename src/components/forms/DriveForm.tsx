@@ -22,7 +22,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
-export const UploadFileForm = () => {
+export const UploadFileForm = ({
+  folderId,
+}: {
+  folderId?: string;
+}) => {
   const handleFiles = async (
     data: UploadFileSchema,
   ) => {
@@ -32,6 +36,8 @@ export const UploadFileForm = () => {
       formdata.append('category', c.value);
     });
     formdata.append('file', data.file);
+    if (folderId)
+      formdata.append('folder', folderId);
     const res = await postCreateFile(formdata);
     return res;
   };
