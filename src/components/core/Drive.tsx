@@ -2,6 +2,7 @@ import React from 'react';
 import {
   faFile,
   faFileCircleMinus,
+  faFilePen,
   faFolder,
   faFolderMinus,
   faPenToSquare,
@@ -9,6 +10,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContextMenu } from 'hooks';
 import { ContextMenuWrapper } from './Context';
+import { summerize } from 'utils';
+import { DRIVE_NAME_LENGTH } from 'constants/index';
 
 type DriveItemProps = {
   name: string;
@@ -77,7 +80,7 @@ export const DriveFolderItem = ({
           icon={faFolder}
         />
         <span className="select-none">
-          {name}
+          {summerize(name, DRIVE_NAME_LENGTH)}
         </span>
       </div>
     </ContextMenuWrapper>
@@ -90,6 +93,7 @@ export const DriveFileItem = ({
   setDeleteName,
   setId,
   openDeleteModal,
+  openEditModal,
   ...others
 }: DriveItemProps) => {
   const handleDoubleClick = () => {
@@ -111,6 +115,14 @@ export const DriveFileItem = ({
         openDeleteModal();
       },
     },
+    {
+      label: 'Edit File',
+      Icon: faFilePen,
+      onClick: () => {
+        setActionId(id);
+        openEditModal();
+      },
+    },
   ];
   return (
     <ContextMenuWrapper
@@ -130,7 +142,7 @@ export const DriveFileItem = ({
           icon={faFile}
         />
         <span className="select-none">
-          {name}
+          {summerize(name, DRIVE_NAME_LENGTH)}
         </span>
       </div>
     </ContextMenuWrapper>

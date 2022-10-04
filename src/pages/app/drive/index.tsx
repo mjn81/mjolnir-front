@@ -1,4 +1,8 @@
-import { deleteFile, getDrive } from 'api';
+import {
+  deleteFile,
+  deleteFolder,
+  getDrive,
+} from 'api';
 import React, {
   useEffect,
   useState,
@@ -13,6 +17,7 @@ import {
   CreateFolderForm,
   DriveFileItem,
   DriveFolderItem,
+  EditFileForm,
   EditFolderForm,
   Modal,
   ModalFormCard,
@@ -82,6 +87,11 @@ const Drive = () => {
     isOpen: isOpenEditFolder,
     openModal: openEditFolderModal,
     closeModal: closeEditFolderModal,
+  } = useModal();
+  const {
+    isOpen: isOpenEditFile,
+    openModal: openEditFileModal,
+    closeModal: closeEditFileModal,
   } = useModal();
   // context logic
 
@@ -173,7 +183,7 @@ const Drive = () => {
                     openDeleteModal
                   }
                   openEditModal={
-                    openEditFolderModal
+                    openEditFileModal
                   }
                 />
               ),
@@ -227,6 +237,9 @@ const Drive = () => {
             <Button
               onClick={() => {
                 if (actionFolderId) {
+                  deleteFolder(
+                    actionFolderId,
+                  ).then(refetchCurrentDirectory);
                   setActionFolderId('');
                 } else if (actionFileId) {
                   deleteFile(actionFileId).then(
@@ -269,6 +282,19 @@ const Drive = () => {
       >
         <ModalFormCard title="edit folder">
           <EditFolderForm id={actionFolderId} />
+        </ModalFormCard>
+      </Modal>
+
+      <Modal
+        isOpen={isOpenEditFile}
+        onClose={() => {
+          setActionFileId('');
+          refetchCurrentDirectory();
+          closeEditFileModal();
+        }}
+      >
+        <ModalFormCard title="edit file">
+          <EditFileForm id={actionFileId} />
         </ModalFormCard>
       </Modal>
     </PageLayout>

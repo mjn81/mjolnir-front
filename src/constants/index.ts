@@ -10,7 +10,8 @@ export enum USER_ROLES {
   USER = 'USER',
 }
 
-export const DRAWE_WINDOW_WIDTH = 200;
+export const DRIVE_NAME_LENGTH = 11;
+
 
 export * from './forms';
 export * from './messages';

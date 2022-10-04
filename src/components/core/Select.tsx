@@ -26,27 +26,20 @@ export const SelectField = ({
     `name-${name}`,
     getOptions || (() => Promise.resolve([])),
   );
-  const handleOnChange = (
-    e: ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFieldValue(name, e.currentTarget.value);
+  const handleOnChange = (newValue) => {
+    setFieldValue(name, newValue);
   };
+  const options = data?.map(({ id, name }) => ({
+    value: id,
+    label: name,
+  }));
   return (
-    <select
+    <Select
       onChange={handleOnChange}
       value={values && values[name]}
-      className="select select-bordered w-full"
+      options={options}
       {...others}
-    >
-      <option disabled selected>
-        {placeholder}
-      </option>
-      {data?.map(({ id, name }) => (
-        <option key={id} value={id}>
-          {name}
-        </option>
-      ))}
-    </select>
+    />
   );
 };
 

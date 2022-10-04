@@ -57,7 +57,14 @@ export type CreateFolderSchema = Yup.InferType<
 export const UPLOAD_FILE_VALIDATOR = Yup.object({
   name: Yup.string().required(),
   file: Yup.mixed().required(),
-  category: Yup.array().min(1).required(),
+  category: Yup.array(
+    Yup.object({
+      label: Yup.string().required(),
+      value: Yup.string().required(),
+    }),
+  )
+    .min(1)
+    .required(),
 }).required();
 
 export type UploadFileSchema = Yup.InferType<
@@ -74,4 +81,27 @@ export const EDIT_FOLDER_VALIDATOR = Yup.object({
 
 export type EditFolderSchema = Yup.InferType<
   typeof EDIT_FOLDER_VALIDATOR
+>;
+
+export const EDIT_FILE_VALIDATOR = Yup.object({
+  name: Yup.string().required(),
+  category: Yup.array().min(1).required(),
+}).required();
+
+export type EditFileSchema = Yup.InferType<
+  typeof EDIT_FILE_VALIDATOR
+>;
+
+export const GENERATE_TOKEN_VALIDATOR =
+  Yup.object({
+    category: Yup.object({
+      value: Yup.string().required(),
+      label: Yup.string().required(),
+    })
+      .optional()
+      .nullable(),
+  }).required();
+
+export type GenerateTokenSchema = Yup.InferType<
+  typeof GENERATE_TOKEN_VALIDATOR
 >;

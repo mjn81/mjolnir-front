@@ -3,7 +3,9 @@ import { getState, useAuthStore } from 'context';
 
 const axios = Axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
+  timeout: 10000,
 });
+
 axios.interceptors.request.use((config) => {
   const token = getState().token;
   if (token) {

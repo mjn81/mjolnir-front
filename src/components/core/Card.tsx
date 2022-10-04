@@ -15,3 +15,21 @@ export const ModalFormCard = ({
     </div>
   );
 };
+
+export const PaperCard = ({
+  className,
+  children,
+}: {
+  className?: string;
+} & PropsWithChildren) => {
+  return (
+    <section
+      className={
+        'shadow border p-5 rounded-lg ' +
+        className
+      }
+    >
+      {children}
+    </section>
+  );
+};

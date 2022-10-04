@@ -1,39 +1,50 @@
 import {
   faClipboard,
   faCodeBranch,
+  faGears,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDistToken } from 'api';
-import { Button, TextInput } from 'components';
+import {
+  Button,
+  Generator,
+  PaperCard,
+  SelectField,
+  TableGenerator,
+  TextInput,
+} from 'components';
+import {
+  GenerateTokenSchema,
+  GENERATE_TOKEN_FIELDS,
+  GENERATE_TOKEN_INITIAL_VALUES,
+  GENERATE_TOKEN_VALIDATOR,
+} from 'constants/index';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Settings = () => {
   const [token, setToken] = useState<string>('');
-  const handleGetToken = () => {
-    const data = {};
-    getDistToken(data).then(
-      ({ dist, message }) => {
+  const handleGetToken = (
+    data: GenerateTokenSchema,
+    { setSubmitting },
+  ) => {
+    const tags = {
+      category: data.category?.value ?? '',
+    };
+    getDistToken(tags)
+      .then(({ dist, message }) => {
         setToken(dist.token);
         toast.success(message);
-      },
-    );
+      })
+      .finally(() => setSubmitting(false));
   };
+
   return (
     <section className="flex items-start space-x-3">
-      <div className="shadow border p-2 rounded-lg">
-        <ul className="space-y-2">
-          <li className="capitalize cursor-pointer hover:bg-base-200 rounded-md px-3 py-1">
-            <FontAwesomeIcon
-              icon={faCodeBranch}
-            />{' '}
-            dist token
-          </li>
-        </ul>
-      </div>
-      <div className="shadow border p-3 rounded-lg w-[30rem]">
-        <h3 className="capitalize mb-2 font-bold text-xl">
-          get dist token
+      <PaperCard className="w-[30rem]">
+        <h3 className="capitalize mb-2 space-x-2 font-bold text-xl">
+          <FontAwesomeIcon icon={faCodeBranch} />
+          <span>get dist token</span>
         </h3>
         <p className="text-sm mb-4">
           do you want to share your files with
@@ -57,11 +68,29 @@ const Settings = () => {
               }}
             />
           </span>
-          <Button full onClick={handleGetToken}>
-            generate token
-          </Button>
+          <Generator
+            fields={GENERATE_TOKEN_FIELDS}
+            initialValues={
+              GENERATE_TOKEN_INITIAL_VALUES
+            }
+            validator={GENERATE_TOKEN_VALIDATOR}
+            submit={handleGetToken}
+            submitBtn={
+              <span>
+                <FontAwesomeIcon
+                  className="mr-2"
+                  icon={faGears}
+                />
+                generate token
+              </span>
+            }
+          />
         </section>
-      </div>
+      </PaperCard>
+
+      <PaperCard className="">
+        {/* <TableGenerator columns={} /> */}
+      </PaperCard>
     </section>
   );
 };

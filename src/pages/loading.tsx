@@ -2,8 +2,8 @@ import React from 'react';
 
 const Loading = () => {
   return (
-    <div className="loading-pimport('./landing')age">
-      <div className="loader">
+    <div className="bg-primary flex items-center justify-center h-screen w-screen p-0 box-border m-0">
+      <div className="w-28">
         <svg
           version="1.1"
           id="L1"

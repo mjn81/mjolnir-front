@@ -5,6 +5,9 @@ import {
   CREATE_FOLDER_FIELDS,
   CREATE_FOLDER_INITIAL_VALUES,
   CREATE_FOLDER_VALIDATOR,
+  EditFileSchema,
+  EDIT_FILE_FIELDS,
+  EDIT_FILE_VALIDATOR,
   EDIT_FOLDER_FIELDS,
   EDIT_FOLDER_VALIDATOR,
   UploadFileSchema,
@@ -13,9 +16,11 @@ import {
   UPLOAD_FILE_VALIDATOR,
 } from 'constants/index';
 import {
-  getFolder,
+  getFileDetails,
+  getFolderDetails,
   postCreateFile,
   postCreateFolder,
+  putEditFile,
   putEditFolder,
 } from 'api';
 import {
@@ -95,11 +100,13 @@ export const CreateFolderForm = ({
 }: {
   parentId: string;
 }) => {
-  // const { enqueueSnackbar } = useSnackbar();
   const { mutateAsync } = useMutation(
     'createFolder',
     postCreateFolder,
     {
+      onSuccess: ({ message }) => {
+        toast.success(message);
+      },
       onError: ({ message }) => {
         toast.error(message);
       },
@@ -108,10 +115,11 @@ export const CreateFolderForm = ({
 
   const handleSubmit = (
     data,
-    { setSubmitting },
+    { setSubmitting, resetForm },
   ) => {
     mutateAsync(data).finally(() => {
       setSubmitting(false);
+      resetForm();
     });
   };
   return (
@@ -142,7 +150,10 @@ export const EditFolderForm = ({
 }) => {
   const { data } = useQuery(
     ['folder', id],
-    async () => getFolder(id),
+    async () => getFolderDetails(id),
+    {
+      enabled: !!id,
+    },
   );
   const { mutateAsync } = useMutation(
     ['editFolder', id],
@@ -155,7 +166,7 @@ export const EditFolderForm = ({
     },
   );
   const initData = {
-    name: data?.name,
+    name: data?.name ?? '',
   };
   const handleSubmit = (
     data,
@@ -174,6 +185,71 @@ export const EditFolderForm = ({
       submitBtn={
         <span>
           edit folder
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="ml-2"
+          />
+        </span>
+      }
+      submit={handleSubmit}
+    />
+  );
+};
+
+export const EditFileForm = ({
+  id,
+}: {
+  id: string;
+}) => {
+  const { data } = useQuery(
+    ['file', id],
+    async () => getFileDetails(id),
+    {
+      enabled: !!id,
+    },
+  );
+
+  const { mutateAsync } = useMutation(
+    ['editFile', id],
+    async (data: EditFileSchema) =>
+      putEditFile(id, data),
+    {
+      onSuccess: ({ message }) => {
+        toast.success(message);
+      },
+      onError: ({ message }) => {
+        toast.error(message);
+      },
+    },
+  );
+  const initData = {
+    name: data?.name ?? '',
+    category: data?.category.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })),
+  };
+
+  const handleSubmit = (
+    data: EditFileSchema,
+    { setSubmitting },
+  ) => {
+    const actualData = {
+      name: data.name,
+      category: data.category.map((c) => c.value),
+    };
+    mutateAsync(actualData).finally(() => {
+      setSubmitting(false);
+    });
+  };
+  return (
+    <Generator
+      fields={EDIT_FILE_FIELDS}
+      initialValues={initData}
+      validator={EDIT_FILE_VALIDATOR}
+      submitBtn={
+        <span>
+          edit file
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="ml-2"

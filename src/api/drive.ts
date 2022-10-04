@@ -33,6 +33,27 @@ export const putEditFolder = async (
   return await put(`/folder/${id}`, data);
 };
 
-export const getFolder = async (id: string) => {
-  return await get(`/folder/${id}`);
+export const getFolderDetails = async (
+  id: string,
+) => {
+  return await get(`/folder/details/${id}`);
+};
+
+export const getFileDetails = async (
+  id: string,
+) => {
+  return await get(`/file/details/${id}`);
+};
+
+export const putEditFile = async (
+  id: string,
+  data: any,
+) => {
+  return await put(`/file/${id}`, data);
+};
+
+export const deleteFolder = async (
+  id: string,
+) => {
+  return await del(`/folder/${id}`);
 };

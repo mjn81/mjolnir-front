@@ -27,3 +27,7 @@ export const CREATE_FOLDER_INITIAL_VALUES = (
   name: '',
   parent: parent,
 });
+
+export const GENERATE_TOKEN_INITIAL_VALUES = {
+  category: [],
+};

@@ -49,3 +49,11 @@ export const CATEGORY_COLUMNS: ColumnsType = [
       ),
   },
 ];
+
+export const TOKEN_COLUMNS: ColumnsType = [
+  {
+    name: 'token',
+    label: 'Token',
+    accessor: (row) => row.token,
+  },
+];

@@ -74,3 +74,33 @@ export const EDIT_FOLDER_FIELDS: FieldsType = [
     required: true,
   },
 ];
+export const EDIT_FILE_FIELDS: FieldsType = [
+  {
+    fieldType: FormFieldTypes.input,
+    name: 'name',
+    placeholder: 'Name',
+    type: 'text',
+    required: true,
+  },
+  {
+    fieldType: FormFieldTypes.multiSelect,
+    name: 'category',
+    placeholder: 'Category',
+    required: true,
+  },
+];
+
+export const GENERATE_TOKEN_FIELDS: FieldsType = [
+  {
+    fieldType: FormFieldTypes.select,
+    name: 'category',
+    placeholder: 'Category',
+    getOptions: async () => {
+      return getCategories().then(
+        (res) => res.categories,
+      );
+    },
+    required: true,
+    isClearable: true,
+  },
+];
