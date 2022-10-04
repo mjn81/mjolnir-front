@@ -6,6 +6,24 @@ import { useFormikContext } from 'formik';
 import { SliderPicker } from 'react-color';
 import { toast } from 'react-toastify';
 
+export const ColorBullet = ({
+  color,
+  onClick,
+}: {
+  color: string;
+  onClick?: () => void;
+}) => {
+  return (
+    <span
+      onClick={onClick}
+      style={{
+        backgroundColor: color,
+        outlineColor: color,
+      }}
+      className="cursor-pointer outline outline-1 outline-offset-2 border-transparent rounded-full w-6 h-6"
+    />
+  );
+};
 export const ColorBox = ({
   color,
 }: {
@@ -17,16 +35,12 @@ export const ColorBox = ({
   };
   return (
     <section className="flex items-center space-x-3">
-      <span
+      <ColorBullet
+        color={color}
         onClick={() => {
           navigator.clipboard.writeText(color);
           afterCopy();
         }}
-        style={{
-          backgroundColor: color,
-          outlineColor: color,
-        }}
-        className="cursor-pointer outline outline-1 outline-offset-2 border-base-300 rounded-full w-6 h-6"
       />
       <div>
         <p

@@ -6,15 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 type TextInputProps = {
+  className?: string;
   [inp: string]: any;
 };
 
 export const TextInput = ({
+  className,
   ...others
 }: TextInputProps) => {
   return (
     <input
-      className="block input input-bordered w-full"
+      className={
+        'block input input-bordered w-full ' +
+        className
+      }
       autoCorrect="false"
       spellCheck="false"
       {...others}
@@ -51,5 +56,17 @@ export const SearchInput = () => {
         </span>
       </label>
     </div>
+  );
+};
+
+export const TextArea = ({
+  className,
+  ...others
+}: TextInputProps) => {
+  return (
+    <textarea
+      className={'textarea w-full ' + className}
+      {...others}
+    />
   );
 };
