@@ -2,6 +2,7 @@ import {
   deleteFile,
   deleteFolder,
   getDrive,
+  getFileDetails,
 } from 'api';
 import React, {
   useEffect,
@@ -34,9 +35,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { PageLayout } from 'layouts';
 import { toast } from 'react-toastify';
+import { summerize } from 'utils';
 
 const Drive = () => {
-  // snackbar
   const [parentId, setParentId] =
     useState<string>('');
   const [folderId, setFolderId] =
@@ -54,7 +55,13 @@ const Drive = () => {
     'getFolderDrive',
     () => getDrive(folderId),
   );
-  // const { mutateAsync } = useMutation('deleteFolder', );
+  const { data: fileData } = useQuery(
+    ['file-detail', fileId],
+    () => getFileDetails(fileId),
+    {
+      enabled: !!fileId,
+    },
+  );
   const refetchCurrentDirectory = () => {
     refetch()
       .then(({ data }) => {
@@ -69,7 +76,7 @@ const Drive = () => {
   }, [folderId]);
 
   // modal logic
-
+  /// will be refactored in next phase
   const { isOpen, openModal, closeModal } =
     useModal();
 
@@ -93,8 +100,19 @@ const Drive = () => {
     openModal: openEditFileModal,
     closeModal: closeEditFileModal,
   } = useModal();
-  // context logic
 
+  const {
+    isOpen: isOpenFile,
+    openModal: openFileModal,
+    closeModal: closeFileModal,
+  } = useModal();
+  const {
+    isOpen: isOpenFolder,
+    openModal: openFolderModal,
+    closeModal: closeFolderModal,
+  } = useModal();
+
+  // context logic
   const {
     contextMenu,
     setContextMenu,
@@ -108,6 +126,8 @@ const Drive = () => {
       onClick: openCreateFolderModal,
     },
   ];
+
+  console.log(fileData);
   return (
     <PageLayout
       title="Drive"
@@ -149,44 +169,53 @@ const Drive = () => {
               }}
               openDeleteModal={() => {}}
               openEditModal={() => {}}
+              openInfoModal={() => {}}
               name="..."
               key={`back_folder_${folderId}`}
             />
           )}
           {!isLoading &&
             data?.data &&
-            data.data.map(({ id, type, name }) =>
-              type === 'folder' ? (
-                <DriveFolderItem
-                  id={id}
-                  setId={setFolderId}
-                  setActionId={setActionFolderId}
-                  setDeleteName={setDeleteName}
-                  name={name}
-                  key={`folder_${id}`}
-                  openDeleteModal={
-                    openDeleteModal
-                  }
-                  openEditModal={
-                    openEditFolderModal
-                  }
-                />
-              ) : (
-                <DriveFileItem
-                  id={id}
-                  setId={setFileId}
-                  setActionId={setActionFileId}
-                  setDeleteName={setDeleteName}
-                  name={name}
-                  key={`file_${id}`}
-                  openDeleteModal={
-                    openDeleteModal
-                  }
-                  openEditModal={
-                    openEditFileModal
-                  }
-                />
-              ),
+            data.data.map(
+              ({ id, form, name, ...other }) =>
+                form === 'folder' ? (
+                  <DriveFolderItem
+                    id={id}
+                    setId={setFolderId}
+                    setActionId={
+                      setActionFolderId
+                    }
+                    setDeleteName={setDeleteName}
+                    name={name}
+                    key={`folder_${id}`}
+                    openDeleteModal={
+                      openDeleteModal
+                    }
+                    openEditModal={
+                      openEditFolderModal
+                    }
+                    openInfoModal={
+                      openFolderModal
+                    }
+                  />
+                ) : (
+                  <DriveFileItem
+                    id={id}
+                    setId={setFileId}
+                    setActionId={setActionFileId}
+                    setDeleteName={setDeleteName}
+                    name={name}
+                    moreInfo={other}
+                    key={`file_${id}`}
+                    openDeleteModal={
+                      openDeleteModal
+                    }
+                    openEditModal={
+                      openEditFileModal
+                    }
+                    openInfoModal={openFileModal}
+                  />
+                ),
             )}
         </section>
       </ContextMenuWrapper>
@@ -295,6 +324,73 @@ const Drive = () => {
       >
         <ModalFormCard title="edit file">
           <EditFileForm id={actionFileId} />
+        </ModalFormCard>
+      </Modal>
+      <Modal
+        isOpen={isOpenFile}
+        onClose={closeFileModal}
+      >
+        <ModalFormCard title="file info">
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              name :
+            </h5>
+            <p>{fileData.name}</p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              iD :
+            </h5>
+            <p>{fileData.id}</p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              type :
+            </h5>
+            <p>{fileData.mimeType}</p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              access mode :
+            </h5>
+            <p>{fileData.access}</p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              tags :
+            </h5>
+            <p>
+              {fileData.category
+                .map(({ name }) => name)
+                .join(', ')}
+            </p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              size :
+            </h5>
+            <p>{fileData.size / 1000000} MB</p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              last modified :
+            </h5>
+            <p>{fileData.updatedAt}</p>
+          </div>
+          <div className="flex space-x-2">
+            <h5 className="font-extrabold capitalize">
+              folder :
+            </h5>
+            <p>{fileData.folder ?? 'root'}</p>
+          </div>
+          <div className="flex items-start space-x-2">
+            <h5 className="font-extrabold whitespace-nowrap capitalize">
+              Drive path :
+            </h5>
+            <p className="text-sm">
+              {fileData.path}
+            </p>
+          </div>
         </ModalFormCard>
       </Modal>
     </PageLayout>

@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { getState, useAuthStore } from 'context';
+import { getState } from 'context';
 
 const axios = Axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
