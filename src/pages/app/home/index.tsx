@@ -1,12 +1,9 @@
-import { faDatabase } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+
 import {
-  DoughnutChart,
   PaperCard,
   UsageChart,
 } from 'components';
-import { useAuthStore } from 'context';
-import React from 'react';
 
 const HomePage = () => {
   return (
