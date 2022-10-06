@@ -2,7 +2,7 @@ import { faDatabase } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DoughnutChart } from 'components/charts';
 import { useAuthStore } from 'context';
-import React from 'react'
+import React from 'react';
 
 export const UsageChart = () => {
   const user = useAuthStore(
@@ -40,4 +40,4 @@ export const UsageChart = () => {
       />
     </>
   );
-}
+};
