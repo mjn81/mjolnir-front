@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import {
   faClipboard,
   faCodeBranch,
+  faPlus,
+  faRetweet,
   faShareNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  createShareRoute,
   deleteToken,
   getShareRoute,
   getTokenList,
@@ -21,7 +24,10 @@ import {
   TextInput,
 } from 'components';
 
-import { useQuery } from 'react-query';
+import {
+  useMutation,
+  useQuery,
+} from 'react-query';
 import { TOKEN_COLUMNS } from 'constants/index';
 import useModal from 'hooks/useModal';
 
@@ -33,14 +39,21 @@ const Settings = () => {
     'getTokenList',
     getTokenList,
   );
-  const { data: shareRoute } = useQuery(
-    'getShareRoute',
-    getShareRoute,
-  );
+  const {
+    data: shareRoute,
+    refetch: refetchShareRoute,
+  } = useQuery('getShareRoute', getShareRoute);
   const { isOpen, closeModal, openModal } =
     useModal();
   const backUrl = import.meta.env.VITE_DIST_URL;
-  const shareUrl = `${backUrl}${shareRoute?.route}/`;
+  const shareUrl = shareRoute?.route
+    ? `${backUrl}${shareRoute?.route}/`
+    : 'havent generated a route yet';
+
+  const { mutateAsync } = useMutation(
+    'create-route',
+    createShareRoute,
+  );
   return (
     <section className="flex flex-col justify-start h-full">
       <section className="flex flex-row items-start space-x-3 min-h-1/3">
@@ -123,6 +136,21 @@ const Settings = () => {
                 }}
               />
             </span>
+            <Button
+              full
+              disabled={!!shareRoute?.route}
+              onClick={() => {
+                mutateAsync().then(
+                  refetchShareRoute,
+                );
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faPlus}
+                className="mr-2"
+              />
+              create route
+            </Button>
           </section>
         </PaperCard>
         <Modal

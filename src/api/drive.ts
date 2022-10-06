@@ -43,7 +43,6 @@ export const getFile = (
       //     .length;
       const { loaded } = progressEvent;
 
-      
       setProgress(
         Math.floor((loaded * 100) / size),
       );

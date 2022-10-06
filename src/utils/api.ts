@@ -28,7 +28,7 @@ export const get = async (
 
 export const post = async (
   uri: string,
-  data: any,
+  data?: any,
   headers?: any,
 ) => {
   return axios

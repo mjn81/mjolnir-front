@@ -3,18 +3,16 @@ import { del, get, post } from 'utils';
 
 export const getDistToken = async (
   data: DistTokenSchema,
-) => {
-  return await post('dist/token', data);
-};
+) => post('dist/token', data);
 
-export const getTokenList = async () => {
-  return await get('dist/token/');
-};
+export const getTokenList = async () =>
+  get('dist/token/');
 
-export const deleteToken = async (id: string) => {
-  return await del(`dist/token/${id}`);
-};
+export const deleteToken = async (id: string) =>
+  del(`dist/token/${id}`);
 
-export const getShareRoute = async () => {
-  return await get('dist/');
-};
+export const getShareRoute = async () =>
+  get('dist/');
+
+export const createShareRoute = async () =>
+  post('dist/');
