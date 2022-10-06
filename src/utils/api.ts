@@ -17,8 +17,13 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
-export const get = async (uri: string) => {
-  return axios.get(uri).then((res) => res.data);
+export const get = async (
+  uri: string,
+  config?: any,
+) => {
+  return axios
+    .get(uri, config)
+    .then((res) => res.data);
 };
 
 export const post = async (

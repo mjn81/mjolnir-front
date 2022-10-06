@@ -21,3 +21,4 @@ export * from './tables';
 export * from './contextMenus';
 export * from './dropdown';
 export * from './mimeTypes';
+export * from './file';

@@ -20,11 +20,13 @@ import {
   DriveFolderItem,
   EditFileForm,
   EditFolderForm,
+  FileSection,
   Modal,
   ModalFormCard,
+  ServeFile,
   UploadFileForm,
 } from 'components';
-import { ALERT_TYPES } from 'constants/index';
+import { FILE_DETIALS } from 'constants/index';
 import { useContextMenu } from 'hooks';
 import useModal from 'hooks/useModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,7 +37,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { PageLayout } from 'layouts';
 import { toast } from 'react-toastify';
-import { summerize } from 'utils';
 
 const Drive = () => {
   const [parentId, setParentId] =
@@ -127,7 +128,6 @@ const Drive = () => {
     },
   ];
 
-  console.log(fileData);
   return (
     <PageLayout
       title="Drive"
@@ -243,6 +243,7 @@ const Drive = () => {
           <CreateFolderForm parentId={folderId} />
         </ModalFormCard>
       </Modal>
+
       <Modal
         isOpen={isOpenDelete}
         onClose={() => {
@@ -326,72 +327,28 @@ const Drive = () => {
           <EditFileForm id={actionFileId} />
         </ModalFormCard>
       </Modal>
+
       <Modal
         isOpen={isOpenFile}
         onClose={closeFileModal}
       >
-        <ModalFormCard title="file info">
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              name :
-            </h5>
-            <p>{fileData.name}</p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              iD :
-            </h5>
-            <p>{fileData.id}</p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              type :
-            </h5>
-            <p>{fileData.mimeType}</p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              access mode :
-            </h5>
-            <p>{fileData.access}</p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              tags :
-            </h5>
-            <p>
-              {fileData.category
-                .map(({ name }) => name)
-                .join(', ')}
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              size :
-            </h5>
-            <p>{fileData.size / 1000000} MB</p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              last modified :
-            </h5>
-            <p>{fileData.updatedAt}</p>
-          </div>
-          <div className="flex space-x-2">
-            <h5 className="font-extrabold capitalize">
-              folder :
-            </h5>
-            <p>{fileData.folder ?? 'root'}</p>
-          </div>
-          <div className="flex items-start space-x-2">
-            <h5 className="font-extrabold whitespace-nowrap capitalize">
-              Drive path :
-            </h5>
-            <p className="text-sm">
-              {fileData.path}
-            </p>
-          </div>
-        </ModalFormCard>
+        {fileData && (
+          <ModalFormCard title="file info">
+            <ServeFile
+              id={fileData.id}
+              size={fileData.size}
+            />
+            {FILE_DETIALS.map(
+              ({ title, accessor }, index) => (
+                <FileSection
+                  key={`${title}_${index}`}
+                  title={title}
+                  content={accessor(fileData)}
+                />
+              ),
+            )}
+          </ModalFormCard>
+        )}
       </Modal>
     </PageLayout>
   );

@@ -8,52 +8,58 @@ export const getDrive = async (id?: string) => {
 export const postCreateFolder = async (data: {
   name: string;
   parent?: string;
-}) => {
-  return await post('/folder', {
+}) =>
+  post('/folder', {
     ...data,
   });
-};
 
-export const postCreateFile = async (
-  data: any,
-) => {
-  return await post('/file', data, {
+export const postCreateFile = async (data: any) =>
+  post('/file', data, {
     'Content-Type': 'multipart/form-data',
   });
-};
 
-export const deleteFile = async (id: string) => {
-  return await del(`/file/${id}`);
-};
+export const deleteFile = (id: string) =>
+  del(`/file/${id}`);
 
 export const putEditFolder = async (
   id: string,
   data: any,
-) => {
-  return await put(`/folder/${id}`, data);
-};
+) => put(`/folder/${id}`, data);
 
-export const getFolderDetails = async (
+export const getFile = (
   id: string,
-) => {
-  return await get(`/folder/details/${id}`);
-};
+  setProgress: (number) => void,
+  size: number,
+) =>
+  get(`file/${id}`, {
+    responseType: 'blob',
+    onDownloadProgress: (progressEvent) => {
+      // const total = parseFloat(
+      //   progressEvent.currentTarget
+      //     .responseHeaders['Content-Length'],
+      // );
+      // const current =
+      //   progressEvent.currentTarget.response
+      //     .length;
+      const { loaded } = progressEvent;
 
-export const getFileDetails = async (
-  id: string,
-) => {
-  return await get(`/file/details/${id}`);
-};
+      
+      setProgress(
+        Math.floor((loaded * 100) / size),
+      );
+    },
+  });
 
-export const putEditFile = async (
+export const getFolderDetails = (id: string) =>
+  get(`/folder/details/${id}`);
+
+export const getFileDetails = (id: string) =>
+  get(`/file/details/${id}`);
+
+export const putEditFile = (
   id: string,
   data: any,
-) => {
-  return await put(`/file/${id}`, data);
-};
+) => put(`/file/${id}`, data);
 
-export const deleteFolder = async (
-  id: string,
-) => {
-  return await del(`/folder/${id}`);
-};
+export const deleteFolder = (id: string) =>
+  del(`/folder/${id}`);
