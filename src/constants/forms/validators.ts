@@ -6,7 +6,6 @@ export const LOGIN_VALIDATOR = Yup.object({
     .required('Email is required'),
   password: Yup.string()
     .min(5)
-    .max(9)
     .required('Password is required'),
 });
 
